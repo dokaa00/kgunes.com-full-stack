@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import Portfolio from './pages/Portfolio';
 import CardStack3D from './components/CardStack3D';
 import ContactSection from './components/ContactSection';
+import SkillsSection from './components/SkillsSection';
 import './App.css';
 
 // Signature Animation Component (Placeholder SVG)
@@ -159,10 +159,28 @@ const MainHero = ({ language, onLanguageChange }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="mx-auto max-w-2xl text-lg font-light leading-relaxed text-white/70 md:text-xl mb-16"
+          className="mx-auto max-w-2xl text-lg font-light leading-relaxed text-white/70 md:text-xl mb-12"
         >
           {t('hero.bio')}
         </motion.p>
+
+        {/* Contact Button */}
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
+          onClick={() => {
+            document.getElementById('contact-section')?.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }}
+          whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(255,255,255,0.2)' }}
+          whileTap={{ scale: 0.95 }}
+          className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold hover:bg-white/20 transition-all shadow-xl"
+        >
+          {t('nav.contact')}
+        </motion.button>
       </motion.div>
     </section>
   );
@@ -212,29 +230,36 @@ function App() {
                       <MainHero language={language} onLanguageChange={setLanguage} />
 
                       {/* 3D Diagonal Fanned Card Stack */}
-                      <CardStack3D />
+                      <div className="pt-20 pb-32">
+                        <CardStack3D />
+                      </div>
+
+                      <div className="skills-section">
+                        <SkillsSection />
+                      </div>
 
                       {/* Contact Section */}
-                      <ContactSection />
+                      <div id="contact-section">
+                        <ContactSection />
+                      </div>
 
                       {/* Footer */}
-                      <footer className="border-t border-white/5 bg-[#050505] py-12 px-6">
-                        <div className="mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-6">
-                          <p className="text-sm text-white/30">
-                            {/* This footer text also exists in Portfolio.js; keeping it static here for now */}
-                            © 2024 All Rights Reserved
-                          </p>
-                          <div className="flex gap-8">
-                            <a href="#" className="text-sm text-white/30 hover:text-white/60 transition-colors">
-                              Instagram
-                            </a>
-                            <a href="#" className="text-sm text-white/30 hover:text-white/60 transition-colors">
-                              LinkedIn
-                            </a>
-                            <a href="#" className="text-sm text-white/30 hover:text-white/60 transition-colors">
-                              Behance
-                            </a>
-                          </div>
+                      <footer className="border-t border-white/5 bg-[#050505] py-16 px-6">
+                        <div className="mx-auto max-w-7xl text-center">
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="space-y-4"
+                          >
+                            <p className="text-white/40 text-sm tracking-wider">
+                              Tasarlanan her proje, bir hikaye anlatır.
+                            </p>
+                            <p className="text-white/20 text-xs">
+                              Made with passion ❤️ by Kaan Güneş
+                            </p>
+                          </motion.div>
                         </div>
                       </footer>
                     </div>

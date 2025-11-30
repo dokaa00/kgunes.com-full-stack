@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Mail, MapPin, Send, Linkedin, Instagram } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ContactSection = () => {
+  const { t } = useTranslation();
+  const titleRef = useRef(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,6 +35,41 @@ const ContactSection = () => {
   const springConfig = { damping: 20, stiffness: 100 };
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
+
+  // GSAP animasyon - başlık karakterleri için (CardStack3D ile tamamen aynı)
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const chars = titleRef.current?.querySelectorAll('.char');
+      if (!chars || chars.length === 0) return;
+
+      gsap.set(chars, { 
+        opacity: 0, 
+        y: 100, 
+        rotateX: -90,
+        filter: 'blur(10px)'
+      });
+
+      gsap.to(chars, {
+        opacity: 1,
+        y: 0,
+        rotateX: 0,
+        filter: 'blur(0px)',
+        duration: 0.8,
+        stagger: {
+          each: 0.05,
+          from: "center",
+        },
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -73,20 +115,35 @@ const ContactSection = () => {
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
+          ref={titleRef}
           className="text-center mb-20"
+          style={{ perspective: '1000px' }}
         >
-          <h2 className="text-6xl md:text-8xl font-extrabold text-white mb-6 tracking-tight">
-            İletişime Geç
+          <h2 className="text-6xl md:text-8xl font-extrabold text-white mb-6 tracking-tight inline-block">
+            {'İletişime Geç'.split('').map((char, i) => (
+              <span 
+                key={i} 
+                className="char inline-block"
+                style={{ 
+                  transformStyle: 'preserve-3d',
+                  display: char === ' ' ? 'inline' : 'inline-block'
+                }}
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
           </h2>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto">
+          <motion.p 
+            initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="text-xl text-white/60 max-w-2xl mx-auto"
+          >
             Bir proje fikriniz mi var? Birlikte harika şeyler yaratalım.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Contact Info - Liquid Glass Card */}

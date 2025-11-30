@@ -4,12 +4,47 @@ import { Folder, ArrowLeft, X, Calendar, Tag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { portfolioCategories } from '../data/portfolioData';
+import { encodeImagePath } from '../utils/imageUtils';
 
 gsap.registerPlugin(ScrollTrigger);
 
 // --- 1. PROJE DETAY MODALI ---
 const ProjectDetail = ({ project, category, onBack }) => {
   const { t } = useTranslation();
+  const [vectorImageLayout, setVectorImageLayout] = useState({ isHorizontal: false, aspectRatio: 1 });
+  const [mannequinImageLayout, setMannequinImageLayout] = useState({ isHorizontal: false, aspectRatio: 1 });
+
+  // Vector görselin boyutlarını kontrol et
+  useEffect(() => {
+    if (project.vectorImage) {
+      const img = new Image();
+      img.src = encodeImagePath(project.vectorImage);
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        setVectorImageLayout({
+          isHorizontal: aspectRatio > 1.2,
+          aspectRatio
+        });
+      };
+    }
+  }, [project.vectorImage]);
+
+  // Mannequin görselin boyutlarını kontrol et
+  useEffect(() => {
+    if (project.mannequinImage) {
+      const img = new Image();
+      img.src = encodeImagePath(project.mannequinImage);
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        setMannequinImageLayout({
+          isHorizontal: aspectRatio > 1.2,
+          aspectRatio
+        });
+      };
+    }
+  }, [project.mannequinImage]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -34,45 +69,131 @@ const ProjectDetail = ({ project, category, onBack }) => {
       </div>
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto p-6 md:p-12">
-        {/* Hero Image */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-8 rounded-3xl overflow-hidden"
-        >
-          <img
-            src={project.tempImage}
-            alt={project.title}
-            className="w-full h-auto object-cover"
-          />
-        </motion.div>
-
+      <div className="max-w-7xl mx-auto p-6 md:p-12">
         {/* Project Info */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-6"
+          transition={{ delay: 0.1 }}
+          className="mb-8"
         >
-          <div>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
-              {project.title}
-            </h1>
-            <div className="flex items-center gap-6 text-white/60 mb-6">
-              <div className="flex items-center gap-2">
-                <Tag size={18} />
-                <span>{category.title}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar size={18} />
-                <span>{project.date || '2024'}</span>
-              </div>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
+            {project.name || project.title}
+          </h1>
+          <div className="flex items-center gap-6 text-white/60 mb-6">
+            <div className="flex items-center gap-2">
+              <Tag size={18} />
+              <span>{category.title}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar size={18} />
+              <span>{project.date || '2024'}</span>
             </div>
           </div>
+        </motion.div>
 
-          {/* Description */}
+        {/* Images Grid - Hoodie: Alt alta, Diğerleri: Yan yana */}
+        {project.mannequinImage && project.vectorImage ? (
+          project.category === 'hoodie' ? (
+            // Hoodie: Vektörel üstte küçük, gerçek görsel altta büyük
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-8 max-w-4xl mx-auto space-y-6"
+            >
+              {/* Vector Image - Küçük */}
+              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative aspect-[16/9]">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+                <img
+                  src={encodeImagePath(project.vectorImage)}
+                  alt={`${project.name} - Vector`}
+                  loading="eager"
+                  className="absolute inset-0 w-full h-full object-contain z-10 p-8"
+                />
+                <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
+                  <p className="text-white/90 text-sm font-medium tracking-wide">Vector Design</p>
+                </div>
+              </div>
+
+              {/* Mannequin Image - Büyük */}
+              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative aspect-[3/4]">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+                <img
+                  src={encodeImagePath(project.mannequinImage)}
+                  alt={`${project.name} - Mannequin`}
+                  loading="eager"
+                  className="absolute inset-0 w-full h-full object-cover z-10"
+                />
+                <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
+                  <p className="text-white/90 text-sm font-medium tracking-wide">Mannequin View</p>
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            // Forma ve T-Shirt: Yan yana
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-8 flex justify-center"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl items-center">
+                {/* Vector Image */}
+                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative h-[500px] w-full md:w-[600px]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+                  <img
+                    src={encodeImagePath(project.vectorImage)}
+                    alt={`${project.name} - Vector`}
+                    loading="eager"
+                    className="absolute inset-0 w-full h-full object-contain z-10 p-6"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
+                    <p className="text-white/90 text-sm font-medium tracking-wide">Vector Design</p>
+                  </div>
+                </div>
+
+                {/* Mannequin Image */}
+                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative h-[500px] w-full md:w-[380px]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+                  <img
+                    src={encodeImagePath(project.mannequinImage)}
+                    alt={`${project.name} - Mannequin`}
+                    loading="eager"
+                    className="absolute inset-0 w-full h-full object-cover z-10"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
+                    <p className="text-white/90 text-sm font-medium tracking-wide">Mannequin View</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )
+        ) : (
+          /* Single Hero Image for all other items */
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-8 rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+            <img
+              src={encodeImagePath(project.mannequinImage || project.image || project.tempImage)}
+              alt={project.name || project.title}
+              loading="eager"
+              className="w-full h-auto object-contain relative z-10"
+            />
+          </motion.div>
+        )}
+
+        {/* Description */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-6"
+        >
           <div className="prose prose-invert max-w-none">
             <p className="text-xl text-white/80 leading-relaxed mb-6">
               {project.description || t('project.defaultDescription', { category: category.title, project: project.title })}
@@ -113,11 +234,13 @@ const ProjectDetail = ({ project, category, onBack }) => {
             className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {project.additionalImages.map((img, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden">
+              <div key={i} className="rounded-2xl overflow-hidden bg-gray-900">
                 <img
                   src={img}
                   alt={`${project.title} - ${i + 1}`}
+                  loading="lazy"
                   className="w-full h-auto object-cover"
+                  style={{ backgroundColor: '#1a1a1a' }}
                 />
               </div>
             ))}
@@ -130,32 +253,11 @@ const ProjectDetail = ({ project, category, onBack }) => {
 
 // --- 2. PROJE GALERİSİ BİLEŞENİ (Düzensiz/Masonry Düzen) ---
 const ProjectGallery = ({ category, onBack }) => {
-  // Proje sayısı kadar sahte veri oluşturuyoruz
-  // Düzensiz görünüm için her karta rastgele yükseklik (aspect ratio) atıyoruz
   const [selectedProject, setSelectedProject] = useState(null);
-
   const { t } = useTranslation();
 
-  const projects = Array.from({ length: category.projectCount }).map((_, i) => ({
-    id: i,
-    title: `${category.title} ${i + 1}`,
-    height: Math.floor(Math.random() * (400 - 200 + 1) + 200), // 200px ile 400px arası rastgele yükseklik
-    image: `https://source.unsplash.com/random/600x${Math.floor(Math.random() * (800 - 400 + 1) + 400)}?${category.title}&sig=${i}`,
-    // Unsplash source artık bazen çalışmıyor, placeholder kullanalım:
-    tempImage: `https://picsum.photos/seed/${category.title}${i}/400/${Math.floor(Math.random() * (600 - 300) + 300)}`,
-    description: t('project.defaultDescription', { category: category.title, project: `${category.title} ${i + 1}` }),
-    date: `2024`,
-    tags: ['Design', 'Creativity', 'Innovation'],
-    details: [
-      `Bu ${category.title} projesi, müşteri ihtiyaçlarını karşılamak için özenle tasarlanmıştır.`,
-      `Proje sürecinde modern tasarım araçları ve metodolojileri kullanılmıştır.`,
-      `Sonuç olarak, hem görsel hem de fonksiyonel açıdan başarılı bir çalışma ortaya çıkmıştır.`
-    ],
-    additionalImages: [
-      `https://picsum.photos/seed/${category.title}${i}-1/800/600`,
-      `https://picsum.photos/seed/${category.title}${i}-2/800/600`
-    ]
-  }));
+  // Gerçek projeleri kullan - eğer varsa
+  const projects = category.projects || [];
 
   return (
     <>
@@ -207,10 +309,12 @@ const ProjectGallery = ({ category, onBack }) => {
                     onClick={() => setSelectedProject(project)}
                   >
                     <img 
-                      src={project.tempImage} 
-                      alt="Project"
+                      src={encodeImagePath(project.mannequinImage || project.image)} 
+                      alt={project.name}
+                      loading="lazy"
                       className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                      style={{ minHeight: '200px' }}
+                      style={{ minHeight: '200px', backgroundColor: '#1a1a1a' }}
+                      onLoad={(e) => e.target.style.backgroundColor = 'transparent'}
                     />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <span className="text-white font-medium px-4 py-2 border border-white/30 rounded-full backdrop-blur-sm">
@@ -373,37 +477,29 @@ const PortfolioContainer = () => {
     return () => window.removeEventListener('mousemove', handleGlobalMouseMove);
   }, [mouseX, mouseY]);
 
-  const categories = [ // KAAN NOT
-    { id: 1, title: 'Sosyal Medya', projectCount: 25, gradient: 'from-purple-600 via-indigo-600 to-purple-800', image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=1200&fit=crop' },
-    { id: 2, title: 'Giyim', projectCount: 8, gradient: 'from-orange-600 via-red-600 to-orange-800', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&h=1200&fit=crop' },
-    { id: 3, title: 'Logolar', projectCount: 9, gradient: 'from-blue-500 via-cyan-500 to-blue-700', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&h=1200&fit=crop' },
-    { id: 4, title: 'Afişler', projectCount: 7, gradient: 'from-pink-500 via-rose-500 to-pink-700', image: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=800&h=1200&fit=crop' },
-    { id: 5, title: 'IoT', projectCount: 2, gradient: 'from-emerald-500 via-teal-500 to-emerald-700', image: 'https://images.unsplash.com/photo-1558002038-1055907df827?w=800&h=1200&fit=crop' },
-    { id: 6, title: 'AI', projectCount: 15, gradient: 'from-amber-500 via-orange-500 to-amber-700', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=1200&fit=crop' },
-  ];
-
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    const handleGlobalMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth) - 0.5;
-      const y = (e.clientY / window.innerHeight) - 0.5;
-      mouseX.set(x);
-      mouseY.set(y);
-    };
-    
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleGlobalMouseMove);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleGlobalMouseMove);
-    };
-  }, [mouseX, mouseY]);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
+
+  const { t } = useTranslation();
+  const titleText = t('cards.title');
+
+  // portfolioData.js'den gelen kategorileri kullan
+  const categories = portfolioCategories.map(cat => ({
+    id: cat.id,
+    title: t(cat.titleKey),
+    projectCount: cat.projectCount,
+    gradient: cat.color,
+    image: cat.image,
+    projects: cat.projects
+  }));
 
   const totalCards = categories.length;
   const cardWidth = isMobile ? 200 : isTablet ? 260 : 340; 
@@ -441,9 +537,6 @@ const PortfolioContainer = () => {
       zIndex: dynamicZIndex, 
     };
   };
-
-  const { t } = useTranslation();
-  const titleText = t('cards.title');
 
   return (
     <section ref={sectionRef} className="relative min-h-screen py-8 bg-[#050505] overflow-hidden font-sans">
@@ -551,11 +644,14 @@ const PortfolioContainer = () => {
                                 </div>
                             </motion.div>
 
-                            <div className={`relative w-full h-full ${isMobile ? 'rounded-[20px]' : isTablet ? 'rounded-[30px]' : 'rounded-[40px]'} overflow-hidden bg-gray-900 border-[1px] border-white/20 shadow-2xl cursor-pointer group`}>
+                            <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-gray-900 border-[1px] border-white/20 shadow-2xl cursor-pointer group">
                                 <img 
-                                    src={category.image} 
-                                    alt={category.title}
-                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                  src={encodeImagePath(category.image)} 
+                                  alt={category.title} 
+                                  loading="eager"
+                                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                  style={{ backgroundColor: '#1a1a1a' }}
+                                  onLoad={(e) => e.target.classList.add('loaded')}
                                 />
                                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-300" />
                                 <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />

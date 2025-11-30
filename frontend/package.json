@@ -59,6 +59,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev_share": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },

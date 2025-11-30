@@ -16,6 +16,9 @@ const resources = {
         worksCount: '{{count}} Çalışma',
         projectListCount: '{{count}} Proje Listeleniyor',
       },
+      nav: {
+        contact: 'İletişime Geç',
+      },
       project: {
         defaultDescription:
           '{{category}} kategorisindeki {{project}} projesi, yaratıcı tasarım ve teknik mükemmelliğin birleşimini sunmaktadır. Proje, modern tasarım prensipleri ve kullanıcı deneyimi odaklı yaklaşımıyla öne çıkmaktadır.',
@@ -115,6 +118,9 @@ const resources = {
         exploreProject: 'View Project',
         worksCount: '{{count}} Works',
         projectListCount: '{{count}} Projects Listed',
+      },
+      nav: {
+        contact: 'Get In Touch',
       },
       project: {
         defaultDescription:
@@ -216,6 +222,9 @@ const resources = {
         worksCount: '{{count}} Arbeiten',
         projectListCount: '{{count}} Projekte gelistet',
       },
+      nav: {
+        contact: 'Kontakt',
+      },
       project: {
         defaultDescription:
           'Das Projekt {{project}} in der Kategorie {{category}} vereint kreatives Design und technische Exzellenz. Es zeichnet sich durch moderne Designprinzipien und einen nutzerzentrierten Ansatz aus.',
@@ -315,6 +324,9 @@ const resources = {
         exploreProject: 'Vedi progetto',
         worksCount: '{{count}} lavori',
         projectListCount: '{{count}} progetti elencati',
+      },
+      nav: {
+        contact: 'Contattami',
       },
       project: {
         defaultDescription:
