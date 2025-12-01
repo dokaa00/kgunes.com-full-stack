@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { ArrowRight, Circle } from 'lucide-react';
 import CardStack3D from './components/CardStack3D';
 import ContactSection from './components/ContactSection';
 import SkillsSection from './components/SkillsSection';
@@ -80,11 +81,10 @@ const LanguageToggle = ({ language, onLanguageChange }) => {
         <button
           key={lng.code}
           onClick={() => onLanguageChange(lng.code)}
-          className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-            language === lng.code
-              ? 'bg-white text-black'
-              : 'text-white/60 hover:text-white/80'
-          }`}
+          className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${language === lng.code
+            ? 'bg-white text-black'
+            : 'text-white/60 hover:text-white/80'
+            }`}
         >
           {lng.label}
         </button>
@@ -118,71 +118,212 @@ const IntroScreen = ({ onComplete }) => {
   );
 };
 
-// Main Hero Section Component
-const MainHero = ({ language, onLanguageChange }) => {
+// Main App Content with New Genre Design
+const MainContent = ({ language, setLanguage }) => {
   const { t } = useTranslation();
+  const { scrollYProgress } = useScroll();
+
+  // Smooth scroll-based background interpolation (New Genre Studio style)
+  const backgroundColor = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.35, 0.6, 0.85, 1],
+    [
+      'rgb(10, 35, 25)',      // Çok koyu yeşil (en üst - New Genre tarzı deep color)
+      'rgb(18, 50, 35)',      // Koyu yeşil (geçiş başlangıcı)
+      'rgb(25, 60, 95)',      // Premium doygun mavi (orta nokta)
+      'rgb(20, 45, 75)',      // Mavi (geçiş)
+      'rgb(12, 25, 40)',      // Koyu mavi (parlaklık düşük)
+      'rgb(8, 18, 30)'        // Çok koyu mavi (son - deep dark)
+    ]
+  );
+
+  // Custom cursor animation
+  const cursorX = useMotionValue(0);
+  const cursorY = useMotionValue(0);
+
+  // Much snappier spring config for responsive feel
+  const springConfig = { damping: 35, stiffness: 400, mass: 0.5 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Direct update without delay
+      cursorX.set(e.clientX - 16);
+      cursorY.set(e.clientY - 16);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [cursorX, cursorY]);
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-center px-6 py-20">
-      {/* Subtle Glow Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-      </div>
+    <>
+      {/* Load Google Fonts & Global Styles */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+          cursor: none !important;
+        }
+        
+        body {
+          overflow-x: hidden;
+        }
+        
 
-      {/* Language Toggle - Top Right */}
-      <div className="absolute top-8 right-8 z-20">
-        <LanguageToggle language={language} onLanguageChange={onLanguageChange} />
-      </div>
+      `}</style>
 
-      {/* Hero Content */}
+      {/* Custom Cursor */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.3 }}
-        className="max-w-4xl text-center z-10 relative"
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border-2 border-white/40 pointer-events-none z-[9999] mix-blend-difference"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+        }}
+      />
+
+      {/* Main Container with Scroll-based Background */}
+      <motion.div
+        style={{ backgroundColor }}
+        className="min-h-screen w-full relative overflow-hidden"
       >
-        {/* Massive Title */}
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mb-8 font-bold tracking-tighter"
+        {/* Sticky Navigation */}
+        <motion.nav
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-8"
         >
-          <div className="text-7xl md:text-[10rem] lg:text-[12rem] leading-none text-white">
-            Kaan Güneş
+          <div className="flex justify-between items-center">
+            <div className="text-white/90 font-['Inter'] text-sm tracking-wider uppercase">
+              Kaan Güneş
+            </div>
+            <div className="flex items-center gap-8 md:gap-12">
+              <div className="hidden md:flex gap-8 text-white/70 font-['Inter'] text-sm">
+                <a href="#work" className="hover:text-white transition-colors duration-300">Work</a>
+                <a href="#skills" className="hover:text-white transition-colors duration-300">Skills</a>
+                <a href="#contact" className="hover:text-white transition-colors duration-300">Contact</a>
+              </div>
+              <LanguageToggle language={language} onLanguageChange={setLanguage} />
+            </div>
           </div>
-        </motion.h1>
+        </motion.nav>
 
-        {/* Bio Text */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mx-auto max-w-2xl text-lg font-light leading-relaxed text-white/70 md:text-xl mb-12"
-        >
-          {t('hero.bio')}
-        </motion.p>
+        {/* Hero Section */}
+        <section className="min-h-screen flex items-center justify-center px-8 md:px-16 pt-32 pb-24">
+          <div className="max-w-7xl w-full">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="space-y-8"
+            >
+              <h1 className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-white/95 leading-[1.1] tracking-tight">
+                Kaan Güneş
+              </h1>
 
-        {/* Contact Button */}
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          onClick={() => {
-            document.getElementById('contact-section')?.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }}
-          whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(255,255,255,0.2)' }}
-          whileTap={{ scale: 0.95 }}
-          className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold hover:bg-white/20 transition-all shadow-xl"
-        >
-          {t('nav.contact')}
-        </motion.button>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="font-['Inter'] text-lg md:text-xl text-white/60 max-w-2xl leading-relaxed"
+              >
+                {t('hero.bio')}
+              </motion.p>
+
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                whileHover={{ x: 10 }}
+                onClick={() => {
+                  document.getElementById('work')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }}
+                className="group flex items-center gap-3 mt-12 text-white/90 font-['Inter'] text-sm tracking-wider uppercase"
+              >
+                <span>{t('hero.explore')}</span>
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
+              </motion.button>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Spacer for scroll effect */}
+        <div className="h-32 md:h-48" />
+
+        {/* Featured Work Label */}
+        <section id="work" className="px-8 md:px-16 pb-12">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="max-w-7xl w-full mx-auto"
+          >
+            <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16">
+              <Circle className="w-2 h-2 fill-current" />
+              <span>{t('sections.selectedWorks')}</span>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Work Section (CardStack3D) */}
+        <section className="pb-32">
+          <CardStack3D />
+        </section>
+
+        {/* Skills Section */}
+        <section id="skills" className="pb-32">
+          <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16 px-8 md:px-16 max-w-7xl mx-auto">
+            <Circle className="w-2 h-2 fill-current" />
+            <span>{t('sections.skills')}</span>
+          </div>
+          <SkillsSection />
+        </section>
+
+        {/* Additional spacing for scroll effect */}
+        <div className="h-48 md:h-64" />
+
+        {/* Footer / Contact Section */}
+        <section id="contact" className="pb-16">
+          <div className="max-w-7xl w-full mx-auto px-8 md:px-16">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="border-t border-white/10 pt-16"
+            >
+              <div className="grid grid-cols-1 gap-12">
+                <div>
+                  <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl font-light text-white/95 mb-6 leading-tight whitespace-pre-line">
+                    {t('footer.title')}
+                  </h2>
+                  <p className="font-['Inter'] text-white/60 leading-relaxed mb-12">
+                    {t('footer.description')}
+                  </p>
+
+                  <ContactSection />
+                </div>
+              </div>
+
+              <div className="mt-24 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-white/40 font-['Inter'] text-xs">
+                <p>{t('footer.copyright')}</p>
+                <div className="flex gap-8">
+                  <a href="#" className="hover:text-white/70 transition-colors">Instagram</a>
+                  <a href="#" className="hover:text-white/70 transition-colors">Twitter</a>
+                  <a href="#" className="hover:text-white/70 transition-colors">LinkedIn</a>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </motion.div>
-    </section>
+    </>
   );
 };
 
@@ -224,46 +365,7 @@ function App() {
               <Routes>
                 <Route
                   path="/"
-                  element={
-                    <div className="relative bg-[#050505]">
-                      {/* Main Hero Section */}
-                      <MainHero language={language} onLanguageChange={setLanguage} />
-
-                      {/* 3D Diagonal Fanned Card Stack */}
-                      <div className="pt-20 pb-32">
-                        <CardStack3D />
-                      </div>
-
-                      <div className="skills-section">
-                        <SkillsSection />
-                      </div>
-
-                      {/* Contact Section */}
-                      <div id="contact-section">
-                        <ContactSection />
-                      </div>
-
-                      {/* Footer */}
-                      <footer className="border-t border-white/5 bg-[#050505] py-16 px-6">
-                        <div className="mx-auto max-w-7xl text-center">
-                          <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="space-y-4"
-                          >
-                            <p className="text-white/40 text-sm tracking-wider">
-                              Tasarlanan her proje, bir hikaye anlatır.
-                            </p>
-                            <p className="text-white/20 text-xs">
-                              Made with passion ❤️ by Kaan Güneş
-                            </p>
-                          </motion.div>
-                        </div>
-                      </footer>
-                    </div>
-                  }
+                  element={<MainContent language={language} setLanguage={setLanguage} />}
                 />
               </Routes>
             </motion.div>

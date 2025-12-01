@@ -98,7 +98,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-b from-[#050505] via-[#0a0a0f] to-[#050505] py-32 px-6 overflow-hidden">
+    <section className="relative min-h-screen bg-transparent py-32 px-6 overflow-hidden">
       {/* Animated Background Blobs */}
       <motion.div
         className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
@@ -121,7 +121,7 @@ const ContactSection = () => {
           style={{ perspective: '1000px' }}
         >
           <h2 className="text-6xl md:text-8xl font-extrabold text-white mb-6 tracking-tight inline-block">
-            {'İletişime Geç'.split('').map((char, i) => (
+            {t('contact.title').split('').map((char, i) => (
               <span 
                 key={i} 
                 className="char inline-block"
@@ -141,7 +141,7 @@ const ContactSection = () => {
             transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="text-xl text-white/60 max-w-2xl mx-auto"
           >
-            Bir proje fikriniz mi var? Birlikte harika şeyler yaratalım.
+            {t('contact.subtitle')}
           </motion.p>
         </div>
 
@@ -178,7 +178,7 @@ const ContactSection = () => {
 
               {/* Content */}
               <div className="relative z-10 space-y-8">
-                <h3 className="text-3xl font-bold text-white mb-8">İletişim Bilgileri</h3>
+                <h3 className="text-3xl font-bold text-white mb-8">{t('contact.infoTitle')}</h3>
                 
                 <motion.a
                   href="mailto:kaangunes2009@gmail.com"
@@ -189,7 +189,7 @@ const ContactSection = () => {
                     <Mail className="text-white" size={24} />
                   </div>
                   <div>
-                    <p className="text-white/50 text-sm">Email</p>
+                    <p className="text-white/50 text-sm">{t('contact.email')}</p>
                     <p className="text-white font-medium">kaangunes2009@gmail.com</p>
                   </div>
                 </motion.a>
@@ -202,14 +202,14 @@ const ContactSection = () => {
                     <MapPin className="text-white" size={24} />
                   </div>
                   <div>
-                    <p className="text-white/50 text-sm">Konum</p>
-                    <p className="text-white font-medium">İstanbul, Türkiye</p>
+                    <p className="text-white/50 text-sm">{t('contact.location')}</p>
+                    <p className="text-white font-medium">{t('contact.locationValue')}</p>
                   </div>
                 </motion.div>
 
                 {/* Social Links */}
                 <div className="pt-8 border-t border-white/10">
-                  <p className="text-white/50 text-sm mb-4">Sosyal Medya</p>
+                  <p className="text-white/50 text-sm mb-4">{t('contact.social')}</p>
                   <div className="grid grid-cols-2 gap-3">
                     <motion.a
                       href="https://www.linkedin.com/in/kaan-gunes/"
@@ -256,43 +256,43 @@ const ContactSection = () => {
               
               {/* Content */}
               <form onSubmit={handleSubmit} className="relative z-10 space-y-6">
-                <h3 className="text-3xl font-bold text-white mb-8">Mesaj Gönder</h3>
+                <h3 className="text-3xl font-bold text-white mb-8">{t('contact.formTitle')}</h3>
 
                 <div className="space-y-2">
-                  <label className="text-white/70 text-sm font-medium">İsim</label>
+                  <label className="text-white/70 text-sm font-medium">{t('contact.formName')}</label>
                   <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all"
-                    placeholder="Adınız Soyadınız"
+                    placeholder={t('contact.formNamePlaceholder')}
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-white/70 text-sm font-medium">Email</label>
+                  <label className="text-white/70 text-sm font-medium">{t('contact.formEmail')}</label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all"
-                    placeholder="ornek@email.com"
+                    placeholder={t('contact.formEmailPlaceholder')}
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-white/70 text-sm font-medium">Mesaj</label>
+                  <label className="text-white/70 text-sm font-medium">{t('contact.formMessage')}</label>
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     rows="6"
                     className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all resize-none"
-                    placeholder="Mesajınızı buraya yazın..."
+                    placeholder={t('contact.formMessagePlaceholder')}
                     required
                   />
                 </div>
@@ -317,7 +317,7 @@ const ContactSection = () => {
                       repeat: isHovered ? Infinity : 0,
                     }}
                   />
-                  <span className="relative z-10">Gönder</span>
+                  <span className="relative z-10">{t('contact.sendButton')}</span>
                   <Send className="relative z-10" size={20} />
                 </motion.button>
               </form>

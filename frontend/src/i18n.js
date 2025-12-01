@@ -5,8 +5,12 @@ const resources = {
   tr: {
     translation: {
       hero: {
-        bio:
-          'Ben Kaan Güneş. İTÜ MTAL Bilişim Teknolojileri öğrencisiyim. 8 yılı aşkın süredir grafik tasarımla ilgileniyorum ve son yıllarda bu birikimimi profesyonel düzeyde çalışmalarla taçlandırıyorum. Tasarım kimliğimin dışında, Generative AI (Üretken Yapay Zeka) dünyasına ilk çıktığı günden beri büyük bir ilgi duyuyorum; bu teknolojiyi yakından takip ediyor ve teknik altyapısını inceleyerek bağımsız bir uzmanlık alanı olarak kendimi bu yönde geliştiriyorum.',
+        bio: 'Ben Kaan Güneş. İTÜ MTAL Bilişim Teknolojileri öğrencisiyim. 8 yılı aşkın süredir grafik tasarımla ilgileniyorum ve son yıllarda bu birikimimi profesyonel düzeyde çalışmalarla taçlandırıyorum. Tasarım kimliğimin dışında, Generative AI (Üretken Yapay Zeka) dünyasına ilk çıktığı günden beri büyük bir ilgi duyuyorum; bu teknolojiyi yakından takip ediyor ve teknik altyapısını inceleyerek bağımsız bir uzmanlık alanı olarak kendimi bu yönde geliştiriyorum.',
+        explore: 'Çalışmalarımı Keşfet'
+      },
+      sections: {
+        selectedWorks: 'Seçili Çalışmalar',
+        skills: 'Yetenekler & Uzmanlık'
       },
       cards: {
         title: 'Projeler',
@@ -20,10 +24,36 @@ const resources = {
         contact: 'İletişime Geç',
       },
       project: {
-        defaultDescription:
-          '{{category}} kategorisindeki {{project}} projesi, yaratıcı tasarım ve teknik mükemmelliğin birleşimini sunmaktadır. Proje, modern tasarım prensipleri ve kullanıcı deneyimi odaklı yaklaşımıyla öne çıkmaktadır.',
+        defaultDescription: '{{category}} kategorisindeki {{project}} projesi, yaratıcı tasarım ve teknik mükemmelliğin birleşimini sunmaktadır. Proje, modern tasarım prensipleri ve kullanıcı deneyimi odaklı yaklaşımıyla öne çıkmaktadır.',
+        vectorDesign: 'Vektörel Tasarım',
+        mannequinView: 'Manken Görünümü'
+      },
+      skills: {
+        title: 'Yetenekler',
+        photoshopTitle: 'Photoshop ile Her Şey Mümkün',
+        photoshopDesc: 'Yaratıcılığın sınırlarını zorlayın. Her fikir, her hayal edilen görsel gerçeğe dönüşebilir.'
+      },
+      contact: {
+        title: 'İletişime Geç',
+        subtitle: 'Bir proje fikriniz mi var? Birlikte harika şeyler yaratalım.',
+        infoTitle: 'İletişim Bilgileri',
+        email: 'E-posta',
+        location: 'Konum',
+        locationValue: 'İstanbul, Türkiye',
+        social: 'Sosyal Medya',
+        formTitle: 'Mesaj Gönder',
+        formName: 'İsim',
+        formNamePlaceholder: 'Adınız Soyadınız',
+        formEmail: 'E-posta',
+        formEmailPlaceholder: 'ornek@email.com',
+        formMessage: 'Mesaj',
+        formMessagePlaceholder: 'Mesajınızı buraya yazın...',
+        sendButton: 'Gönder'
       },
       footer: {
+        title: 'Birlikte harika\nşeyler yaratalım',
+        description: 'Yaratıcı sınırları zorlamak için her zaman yeni zorluklar ve fırsatlar arıyorum.',
+        copyright: '© 2025 Kaan Güneş. Tüm hakları saklıdır.',
         rights: '© 2024 Tüm Hakları Saklıdır',
       },
       portfolio: {
@@ -108,8 +138,12 @@ const resources = {
   en: {
     translation: {
       hero: {
-        bio:
-          "I'm Kaan Güneş. I'm an ITU MTAL Information Technologies student. I've been interested in graphic design for over 8 years and in recent years I have been turning this experience into professional-level work. Beyond my designer identity, I have had a strong interest in the world of Generative AI since it first emerged; I closely follow this technology and study its technical foundations, developing myself in this field as an independent area of expertise.",
+        bio: "I'm Kaan Güneş. I'm an ITU MTAL Information Technologies student. I've been interested in graphic design for over 8 years and in recent years I have been turning this experience into professional-level work. Beyond my designer identity, I have had a strong interest in the world of Generative AI since it first emerged; I closely follow this technology and study its technical foundations, developing myself in this field as an independent area of expertise.",
+        explore: 'Explore My Work'
+      },
+      sections: {
+        selectedWorks: 'Selected Works',
+        skills: 'Skills & Expertise'
       },
       cards: {
         title: 'Projects',
@@ -123,10 +157,36 @@ const resources = {
         contact: 'Get In Touch',
       },
       project: {
-        defaultDescription:
-          'The {{project}} project in the {{category}} category brings together creative design and technical excellence. It stands out with modern design principles and a user-experience–focused approach.',
+        defaultDescription: 'The {{project}} project in the {{category}} category brings together creative design and technical excellence. It stands out with modern design principles and a user-experience–focused approach.',
+        vectorDesign: 'Vector Design',
+        mannequinView: 'Mannequin View'
+      },
+      skills: {
+        title: 'Skills',
+        photoshopTitle: 'Everything is Possible with Photoshop',
+        photoshopDesc: 'Push the boundaries of creativity. Every idea, every imagined visual can turn into reality.'
+      },
+      contact: {
+        title: 'Get In Touch',
+        subtitle: 'Have a project in mind? Let\'s create something great together.',
+        infoTitle: 'Contact Information',
+        email: 'Email',
+        location: 'Location',
+        locationValue: 'Istanbul, Turkey',
+        social: 'Social Media',
+        formTitle: 'Send Message',
+        formName: 'Name',
+        formNamePlaceholder: 'Your Name',
+        formEmail: 'Email',
+        formEmailPlaceholder: 'example@email.com',
+        formMessage: 'Message',
+        formMessagePlaceholder: 'Write your message here...',
+        sendButton: 'Send'
       },
       footer: {
+        title: 'Let\'s create\nsomething together',
+        description: 'Always looking for new challenges and opportunities to push creative boundaries.',
+        copyright: '© 2025 Kaan Güneş. All rights reserved.',
         rights: '© 2024 All Rights Reserved',
       },
       portfolio: {
@@ -211,8 +271,12 @@ const resources = {
   de: {
     translation: {
       hero: {
-        bio:
-          'Ich bin Kaan Güneş. Ich bin Schüler der ITU MTAL im Bereich Informationstechnologien. Seit über 8 Jahren beschäftige ich mich mit Grafikdesign und kröne diese Erfahrung in den letzten Jahren mit professionellen Arbeiten. Neben meiner Designeridentität interessiere ich mich seit dem ersten Aufkommen sehr für die Welt der Generativen KI; ich verfolge diese Technologie aufmerksam, studiere ihre technische Grundlage und entwickle mich in diesem Bereich als eigenständiges Fachgebiet weiter.',
+        bio: 'Ich bin Kaan Güneş. Ich bin Schüler der ITU MTAL im Bereich Informationstechnologien. Seit über 8 Jahren beschäftige ich mich mit Grafikdesign und kröne diese Erfahrung in den letzten Jahren mit professionellen Arbeiten. Neben meiner Designeridentität interessiere ich mich seit dem ersten Aufkommen sehr für die Welt der Generativen KI; ich verfolge diese Technologie aufmerksam, studiere ihre technische Grundlage und entwickle mich in diesem Bereich als eigenständiges Fachgebiet weiter.',
+        explore: 'Meine Arbeiten entdecken'
+      },
+      sections: {
+        selectedWorks: 'Ausgewählte Arbeiten',
+        skills: 'Fähigkeiten & Expertise'
       },
       cards: {
         title: 'Projekte',
@@ -226,10 +290,36 @@ const resources = {
         contact: 'Kontakt',
       },
       project: {
-        defaultDescription:
-          'Das Projekt {{project}} in der Kategorie {{category}} vereint kreatives Design und technische Exzellenz. Es zeichnet sich durch moderne Designprinzipien und einen nutzerzentrierten Ansatz aus.',
+        defaultDescription: 'Das Projekt {{project}} in der Kategorie {{category}} vereint kreatives Design und technische Exzellenz. Es zeichnet sich durch moderne Designprinzipien und einen nutzerzentrierten Ansatz aus.',
+        vectorDesign: 'Vektordesign',
+        mannequinView: 'Schaufensterpuppen-Ansicht'
+      },
+      skills: {
+        title: 'Fähigkeiten',
+        photoshopTitle: 'Mit Photoshop ist alles möglich',
+        photoshopDesc: 'Verschieben Sie die Grenzen der Kreativität. Jede Idee, jedes vorgestellte Bild kann Realität werden.'
+      },
+      contact: {
+        title: 'Kontakt aufnehmen',
+        subtitle: 'Haben Sie eine Projektidee? Lassen Sie uns gemeinsam etwas Großartiges schaffen.',
+        infoTitle: 'Kontaktinformationen',
+        email: 'E-Mail',
+        location: 'Standort',
+        locationValue: 'Istanbul, Türkei',
+        social: 'Soziale Medien',
+        formTitle: 'Nachricht senden',
+        formName: 'Name',
+        formNamePlaceholder: 'Ihr Name',
+        formEmail: 'E-Mail',
+        formEmailPlaceholder: 'beispiel@email.com',
+        formMessage: 'Nachricht',
+        formMessagePlaceholder: 'Schreiben Sie Ihre Nachricht hier...',
+        sendButton: 'Senden'
       },
       footer: {
+        title: 'Lass uns gemeinsam\netwas erschaffen',
+        description: 'Immer auf der Suche nach neuen Herausforderungen und Möglichkeiten, kreative Grenzen zu überschreiten.',
+        copyright: '© 2025 Kaan Güneş. Alle Rechte vorbehalten.',
         rights: '© 2024 Alle Rechte vorbehalten',
       },
       portfolio: {
@@ -314,8 +404,12 @@ const resources = {
   it: {
     translation: {
       hero: {
-        bio:
-          'Sono Kaan Güneş. Studio Tecnologie Informatiche presso ITU MTAL. Da oltre 8 anni mi occupo di graphic design e negli ultimi anni ho trasformato questa esperienza in lavori a livello professionale. Oltre alla mia identità di designer, seguo con grande interesse il mondo della Generative AI fin dalla sua comparsa; seguo da vicino questa tecnologia, ne studio le basi tecniche e mi sviluppo in questo ambito come area di competenza indipendente.',
+        bio: 'Sono Kaan Güneş. Studio Tecnologie Informatiche presso ITU MTAL. Da oltre 8 anni mi occupo di graphic design e negli ultimi anni ho trasformato questa esperienza in lavori a livello professionale. Oltre alla mia identità di designer, seguo con grande interesse il mondo della Generative AI fin dalla sua comparsa; seguo da vicino questa tecnologia, ne studio le basi tecniche e mi sviluppo in questo ambito come area di competenza indipendente.',
+        explore: 'Esplora i miei lavori'
+      },
+      sections: {
+        selectedWorks: 'Lavori Selezionati',
+        skills: 'Competenze ed Esperienza'
       },
       cards: {
         title: 'Progetti',
@@ -329,10 +423,36 @@ const resources = {
         contact: 'Contattami',
       },
       project: {
-        defaultDescription:
-          'Il progetto {{project}} nella categoria {{category}} unisce design creativo ed eccellenza tecnica. Si distingue per i principi di design moderni e un approccio incentrato sull’esperienza utente.',
+        defaultDescription: 'Il progetto {{project}} nella categoria {{category}} unisce design creativo ed eccellenza tecnica. Si distingue per i principi di design moderni e un approccio incentrato sull’esperienza utente.',
+        vectorDesign: 'Design Vettoriale',
+        mannequinView: 'Vista Manichino'
+      },
+      skills: {
+        title: 'Competenze',
+        photoshopTitle: 'Tutto è possibile con Photoshop',
+        photoshopDesc: 'Spingi i confini della creatività. Ogni idea, ogni immagine immaginata può diventare realtà.'
+      },
+      contact: {
+        title: 'Mettiti in contatto',
+        subtitle: 'Hai un\'idea per un progetto? Creiamo qualcosa di fantastico insieme.',
+        infoTitle: 'Informazioni di contatto',
+        email: 'Email',
+        location: 'Posizione',
+        locationValue: 'Istanbul, Turchia',
+        social: 'Social Media',
+        formTitle: 'Invia Messaggio',
+        formName: 'Nome',
+        formNamePlaceholder: 'Il tuo nome',
+        formEmail: 'Email',
+        formEmailPlaceholder: 'esempio@email.com',
+        formMessage: 'Messaggio',
+        formMessagePlaceholder: 'Scrivi qui il tuo messaggio...',
+        sendButton: 'Invia'
       },
       footer: {
+        title: 'Creiamo qualcosa\ninsieme',
+        description: 'Sempre alla ricerca di nuove sfide e opportunità per spingere i confini creativi.',
+        copyright: '© 2025 Kaan Güneş. Tutti i diritti riservati.',
         rights: '© 2024 Tutti i diritti riservati',
       },
       portfolio: {

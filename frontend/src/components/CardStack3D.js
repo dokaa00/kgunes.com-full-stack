@@ -100,33 +100,33 @@ const ProjectDetail = ({ project, category, onBack }) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mb-8 max-w-4xl mx-auto space-y-6"
+              className="mb-8 max-w-5xl mx-auto space-y-6"
             >
               {/* Vector Image - Küçük */}
-              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative aspect-[16/9]">
+              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
                 <img
                   src={encodeImagePath(project.vectorImage)}
                   alt={`${project.name} - Vector`}
                   loading="eager"
-                  className="absolute inset-0 w-full h-full object-contain z-10 p-8"
+                  className="w-full h-auto object-contain z-10 p-8"
                 />
                 <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
-                  <p className="text-white/90 text-sm font-medium tracking-wide">Vector Design</p>
+                  <p className="text-white/90 text-sm font-medium tracking-wide">{t('project.vectorDesign')}</p>
                 </div>
               </div>
 
               {/* Mannequin Image - Büyük */}
-              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative aspect-[3/4]">
+              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
                 <img
                   src={encodeImagePath(project.mannequinImage)}
                   alt={`${project.name} - Mannequin`}
                   loading="eager"
-                  className="absolute inset-0 w-full h-full object-cover z-10"
+                  className="w-full h-auto object-contain z-10 p-4"
                 />
                 <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
-                  <p className="text-white/90 text-sm font-medium tracking-wide">Mannequin View</p>
+                  <p className="text-white/90 text-sm font-medium tracking-wide">{t('project.mannequinView')}</p>
                 </div>
               </div>
             </motion.div>
@@ -138,32 +138,32 @@ const ProjectDetail = ({ project, category, onBack }) => {
               transition={{ delay: 0.2 }}
               className="mb-8 flex justify-center"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl items-start">
                 {/* Vector Image */}
-                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative h-[500px] w-full md:w-[600px]">
+                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
                   <img
                     src={encodeImagePath(project.vectorImage)}
                     alt={`${project.name} - Vector`}
                     loading="eager"
-                    className="absolute inset-0 w-full h-full object-contain z-10 p-6"
+                    className="w-full h-auto object-contain z-10 p-8"
                   />
                   <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
-                    <p className="text-white/90 text-sm font-medium tracking-wide">Vector Design</p>
+                    <p className="text-white/90 text-sm font-medium tracking-wide">{t('project.vectorDesign')}</p>
                   </div>
                 </div>
 
                 {/* Mannequin Image */}
-                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative h-[500px] w-full md:w-[380px]">
+                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
                   <img
                     src={encodeImagePath(project.mannequinImage)}
                     alt={`${project.name} - Mannequin`}
                     loading="eager"
-                    className="absolute inset-0 w-full h-full object-cover z-10"
+                    className="w-full h-auto object-contain z-10 p-4"
                   />
                   <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
-                    <p className="text-white/90 text-sm font-medium tracking-wide">Mannequin View</p>
+                    <p className="text-white/90 text-sm font-medium tracking-wide">{t('project.mannequinView')}</p>
                   </div>
                 </div>
               </div>
@@ -539,7 +539,7 @@ const PortfolioContainer = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen py-8 bg-[#050505] overflow-hidden font-sans">
+    <section ref={sectionRef} className="relative min-h-screen py-8 bg-transparent font-sans">
       
       <AnimatePresence mode="wait">
         
