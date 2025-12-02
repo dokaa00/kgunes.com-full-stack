@@ -45,6 +45,7 @@ code {
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
     }
+
     .dark {
         --background: 0 0% 3.9%;
         --foreground: 0 0% 98%;
@@ -77,8 +78,38 @@ code {
     * {
         @apply border-border;
     }
+
     body {
-        @apply bg-background text-foreground;
+        @apply text-foreground;
+        background: linear-gradient(to bottom,
+                #0c5f4d 0%,
+                #07151D 10%,
+                #080C18 20%,
+                #080B18 30%,
+                #080C1F 40%,
+                #081027 50%,
+                #08162D 60%,
+                #111D2E 70%,
+                #372A27 80%,
+                #65371C 90%,
+                #864114 100%);
+        min-height: 100vh;
+        position: relative;
+    }
+
+    body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.07;
+        background-repeat: repeat;
+        background-size: 128px 128px;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 }
 
@@ -87,7 +118,7 @@ code {
         display: contents !important;
     }
 
-    [data-debug-wrapper="true"] > * {
+    [data-debug-wrapper="true"]>* {
         margin-left: inherit;
         margin-right: inherit;
         margin-top: inherit;

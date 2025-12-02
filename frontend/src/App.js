@@ -121,30 +121,27 @@ const IntroScreen = ({ onComplete }) => {
 // Main App Content with New Genre Design
 const MainContent = ({ language, setLanguage }) => {
   const { t } = useTranslation();
-  const { scrollYProgress } = useScroll();
-
-  // Smooth scroll-based background interpolation (New Genre Studio style)
-  const backgroundColor = useTransform(
-    scrollYProgress,
-    [0, 0.15, 0.35, 0.6, 0.85, 1],
-    [
-      'rgb(10, 35, 25)',      // Çok koyu yeşil (en üst - New Genre tarzı deep color)
-      'rgb(18, 50, 35)',      // Koyu yeşil (geçiş başlangıcı)
-      'rgb(25, 60, 95)',      // Premium doygun mavi (orta nokta)
-      'rgb(20, 45, 75)',      // Mavi (geçiş)
-      'rgb(12, 25, 40)',      // Koyu mavi (parlaklık düşük)
-      'rgb(8, 18, 30)'        // Çok koyu mavi (son - deep dark)
-    ]
-  );
 
   // Custom cursor animation
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
 
-  // Much snappier spring config for responsive feel
-  const springConfig = { damping: 35, stiffness: 400, mass: 0.5 };
-  const cursorXSpring = useSpring(cursorX, springConfig);
-  const cursorYSpring = useSpring(cursorY, springConfig);
+  // Direct motion values for instant follow
+  // const springConfig = { damping: 35, stiffness: 400, mass: 0.5 };
+  // const cursorXSpring = useSpring(cursorX, springConfig);
+  // const cursorYSpring = useSpring(cursorY, springConfig);
+
+  const { scrollY } = useScroll();
+
+  // Nav animations: Fade out and blur
+  const navOpacity = useTransform(scrollY, [0, 200], [1, 0]);
+  const navBlur = useTransform(scrollY, [0, 200], ["blur(0px)", "blur(4px)"]);
+  const navPointerEvents = useTransform(scrollY, (y) => y > 200 ? 'none' : 'auto');
+
+  // Hero animations: Sticky then scroll up
+  // Stays fixed (y=0) until 500px, then moves up
+  const heroY = useTransform(scrollY, [0, 500, 1200], [0, 0, -800]);
+  const heroOpacity = useTransform(scrollY, [800, 1200], [1, 0]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -162,15 +159,15 @@ const MainContent = ({ language, setLanguage }) => {
       {/* Load Google Fonts & Global Styles */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         * {
           cursor: none !important;
         }
-        
+
         body {
           overflow-x: hidden;
         }
-        
+
 
       `}</style>
 
@@ -178,21 +175,19 @@ const MainContent = ({ language, setLanguage }) => {
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full border-2 border-white/40 pointer-events-none z-[9999] mix-blend-difference"
         style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
+          x: cursorX,
+          y: cursorY,
         }}
       />
 
-      {/* Main Container with Scroll-based Background */}
-      <motion.div
-        style={{ backgroundColor }}
-        className="min-h-screen w-full relative overflow-hidden"
-      >
+      {/* Main Container */}
+      <div className="relative min-h-screen w-full">
         {/* Sticky Navigation */}
         <motion.nav
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
+          style={{ opacity: navOpacity, filter: navBlur, pointerEvents: navPointerEvents }}
           className="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-8"
         >
           <div className="flex justify-between items-center">
@@ -210,14 +205,15 @@ const MainContent = ({ language, setLanguage }) => {
           </div>
         </motion.nav>
 
-        {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center px-8 md:px-16 pt-32 pb-24">
-          <div className="max-w-7xl w-full">
+        {/* Fixed Hero Section */}
+        <section className="fixed inset-0 flex items-center justify-center px-8 md:px-16 z-0 pointer-events-none">
+          <div className="max-w-7xl w-full text-center">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
+              style={{ y: heroY, opacity: heroOpacity }}
               transition={{ duration: 1, delay: 0.4 }}
-              className="space-y-8"
+              className="space-y-8 flex flex-col items-center"
             >
               <h1 className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-white/95 leading-[1.1] tracking-tight">
                 Kaan Güneş
@@ -243,7 +239,7 @@ const MainContent = ({ language, setLanguage }) => {
                     block: 'start'
                   });
                 }}
-                className="group flex items-center gap-3 mt-12 text-white/90 font-['Inter'] text-sm tracking-wider uppercase"
+                className="group flex items-center gap-3 mt-12 text-white/90 font-['Inter'] text-sm tracking-wider uppercase pointer-events-auto"
               >
                 <span>{t('hero.explore')}</span>
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
@@ -252,77 +248,77 @@ const MainContent = ({ language, setLanguage }) => {
           </div>
         </section>
 
-        {/* Spacer for scroll effect */}
-        <div className="h-32 md:h-48" />
+        {/* Scrollable Content Wrapper */}
+        <div className="relative z-10">
+          {/* Spacer to allow seeing the fixed hero initially */}
+          <div className="h-[150vh]" />
 
-        {/* Featured Work Label */}
-        <section id="work" className="px-8 md:px-16 pb-12">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="max-w-7xl w-full mx-auto"
-          >
-            <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16">
-              <Circle className="w-2 h-2 fill-current" />
-              <span>{t('sections.selectedWorks')}</span>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* Work Section (CardStack3D) */}
-        <section className="pb-32">
-          <CardStack3D />
-        </section>
-
-        {/* Skills Section */}
-        <section id="skills" className="pb-32">
-          <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16 px-8 md:px-16 max-w-7xl mx-auto">
-            <Circle className="w-2 h-2 fill-current" />
-            <span>{t('sections.skills')}</span>
-          </div>
-          <SkillsSection />
-        </section>
-
-        {/* Additional spacing for scroll effect */}
-        <div className="h-48 md:h-64" />
-
-        {/* Footer / Contact Section */}
-        <section id="contact" className="pb-16">
-          <div className="max-w-7xl w-full mx-auto px-8 md:px-16">
+          {/* Featured Work Label */}
+          <section id="work" className="px-8 md:px-16 pb-12 pt-24 bg-gradient-to-b from-transparent to-black/20 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="border-t border-white/10 pt-16"
+              className="max-w-7xl w-full mx-auto"
             >
-              <div className="grid grid-cols-1 gap-12">
-                <div>
-                  <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl font-light text-white/95 mb-6 leading-tight whitespace-pre-line">
-                    {t('footer.title')}
-                  </h2>
-                  <p className="font-['Inter'] text-white/60 leading-relaxed mb-12">
-                    {t('footer.description')}
-                  </p>
-
-                  <ContactSection />
-                </div>
-              </div>
-
-              <div className="mt-24 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-white/40 font-['Inter'] text-xs">
-                <p>{t('footer.copyright')}</p>
-                <div className="flex gap-8">
-                  <a href="#" className="hover:text-white/70 transition-colors">Instagram</a>
-                  <a href="#" className="hover:text-white/70 transition-colors">Twitter</a>
-                  <a href="#" className="hover:text-white/70 transition-colors">LinkedIn</a>
-                </div>
+              <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16">
+                <Circle className="w-2 h-2 fill-current" />
+                <span>{t('sections.selectedWorks')}</span>
               </div>
             </motion.div>
-          </div>
-        </section>
-      </motion.div>
+          </section>
+
+          {/* Work Section (CardStack3D) */}
+          <section className="pb-32 bg-black/20 backdrop-blur-sm">
+            <CardStack3D />
+          </section>
+
+          {/* Skills Section */}
+          <section id="skills" className="pb-32 bg-black/20 backdrop-blur-sm">
+            <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16 px-8 md:px-16 max-w-7xl mx-auto">
+              <Circle className="w-2 h-2 fill-current" />
+              <span>{t('sections.skills')}</span>
+            </div>
+            <SkillsSection />
+          </section>
+
+          {/* Footer / Contact Section */}
+          <section id="contact" className="pb-16 bg-black/20 backdrop-blur-sm">
+            <div className="max-w-7xl w-full mx-auto px-8 md:px-16">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                className="border-t border-white/10 pt-16"
+              >
+                <div className="grid grid-cols-1 gap-12">
+                  <div>
+                    <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl font-light text-white/95 mb-6 leading-tight whitespace-pre-line">
+                      {t('footer.title')}
+                    </h2>
+                    <p className="font-['Inter'] text-white/60 leading-relaxed mb-12">
+                      {t('footer.description')}
+                    </p>
+
+                    <ContactSection />
+                  </div>
+                </div>
+
+                <div className="mt-24 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-white/40 font-['Inter'] text-xs">
+                  <p>{t('footer.copyright')}</p>
+                  <div className="flex gap-8">
+                    <a href="#" className="hover:text-white/70 transition-colors">Instagram</a>
+                    <a href="#" className="hover:text-white/70 transition-colors">Twitter</a>
+                    <a href="#" className="hover:text-white/70 transition-colors">LinkedIn</a>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+        </div>
+      </div>
     </>
   );
 };
@@ -349,12 +345,16 @@ function App() {
     }
   }, [language, i18n]);
 
+  const handleIntroComplete = React.useCallback(() => {
+    setLoading(false);
+  }, []);
+
   return (
     <BrowserRouter>
-      <div className="relative bg-[#050505] min-h-screen">
-        <AnimatePresence mode="wait">
+      <div className="relative min-h-screen">
+        <AnimatePresence>
           {loading ? (
-            <IntroScreen key="intro" onComplete={() => setLoading(false)} />
+            <IntroScreen key="intro" onComplete={handleIntroComplete} />
           ) : (
             <motion.div
               key="main"
