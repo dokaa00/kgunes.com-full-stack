@@ -22,7 +22,10 @@ const resources = {
         comingSoon: 'Yakında',
       },
       nav: {
-        contact: 'İletişime Geç',
+        portfolio: 'Portfolyo',
+        work: 'Çalışmalar',
+        skills: 'Yetenekler',
+        contact: 'İletişim',
       },
       project: {
         defaultDescription: '{{category}} kategorisindeki {{project}} projesi, yaratıcı tasarım ve teknik mükemmelliğin birleşimini sunmaktadır. Proje, modern tasarım prensipleri ve kullanıcı deneyimi odaklı yaklaşımıyla öne çıkmaktadır.',
@@ -156,7 +159,10 @@ const resources = {
         comingSoon: 'Coming Soon',
       },
       nav: {
-        contact: 'Get In Touch',
+        portfolio: 'Portfolio',
+        work: 'Work',
+        skills: 'Skills',
+        contact: 'Contact',
       },
       project: {
         defaultDescription: 'The {{project}} project in the {{category}} category brings together creative design and technical excellence. It stands out with modern design principles and a user-experience–focused approach.',
@@ -290,6 +296,9 @@ const resources = {
         comingSoon: 'Demnächst',
       },
       nav: {
+        portfolio: 'Portfolio',
+        work: 'Arbeiten',
+        skills: 'Fähigkeiten',
         contact: 'Kontakt',
       },
       project: {
@@ -424,7 +433,10 @@ const resources = {
         comingSoon: 'Prossimamente',
       },
       nav: {
-        contact: 'Contattami',
+        portfolio: 'Portfolio',
+        work: 'Lavori',
+        skills: 'Competenze',
+        contact: 'Contatto',
       },
       project: {
         defaultDescription: 'Il progetto {{project}} nella categoria {{category}} unisce design creativo ed eccellenza tecnica. Si distingue per i principi di design moderni e un approccio incentrato sull’esperienza utente.',

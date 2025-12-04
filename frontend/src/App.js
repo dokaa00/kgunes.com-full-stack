@@ -252,13 +252,13 @@ const MainContent = ({ language, setLanguage }) => {
         >
           <div className="flex justify-between items-center">
             <div className="text-white/90 font-sans text-sm tracking-wider uppercase">
-              Kaan Güneş
+              {t('nav.portfolio')}
             </div>
             <div className="flex items-center gap-8 md:gap-12">
               <div className="hidden md:flex gap-8 text-white/70 font-sans text-sm">
-                <a href="#work" className="hover:text-white transition-colors duration-300">Work</a>
-                <a href="#skills" className="hover:text-white transition-colors duration-300">Skills</a>
-                <a href="#contact" className="hover:text-white transition-colors duration-300">Contact</a>
+                <a href="#work" className="hover:text-white transition-colors duration-300">{t('nav.work')}</a>
+                <a href="#skills" className="hover:text-white transition-colors duration-300">{t('nav.skills')}</a>
+                <a href="#contact" className="hover:text-white transition-colors duration-300">{t('nav.contact')}</a>
               </div>
               <LanguageToggle language={language} onLanguageChange={setLanguage} />
             </div>

@@ -90,7 +90,7 @@ const SkillsSection = ({ setCursorVariant }) => {
             >
               {/* Background Image (After) */}
               <img
-                src="/images/sosyalmedya/kasım_sf.png"
+                src="/images/sosyalmedya/kasım_sf.webp"
                 alt="After"
                 className="w-full h-auto object-contain"
               />
@@ -103,7 +103,7 @@ const SkillsSection = ({ setCursorVariant }) => {
                 }}
               >
                 <img
-                  src="/images/sosyalmedya/kasım_sf_pre.png"
+                  src="/images/sosyalmedya/kasım_sf_pre.webp"
                   alt="Before"
                   className="w-full h-full object-contain pointer-events-none"
                 />

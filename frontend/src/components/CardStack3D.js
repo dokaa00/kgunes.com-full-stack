@@ -7,6 +7,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { portfolioCategories } from '../data/portfolioData';
 import { encodeImagePath } from '../utils/imageUtils';
+import OptimizedImage from './OptimizedImage';
+import { preloadImages, preloadVisibleImages } from '../utils/imageOptimization';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,10 +108,11 @@ const ProjectDetail = ({ project, category, onBack }) => {
               {/* Vector Image - Küçük */}
               <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
-                <img
-                  src={encodeImagePath(project.vectorImage)}
+                <OptimizedImage
+                  src={project.vectorImage}
                   alt={`${project.name} - Vector`}
                   loading="eager"
+                  priority={1}
                   className="w-full h-auto object-contain z-10 p-8"
                 />
                 <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
@@ -120,10 +123,11 @@ const ProjectDetail = ({ project, category, onBack }) => {
               {/* Mannequin Image - Büyük */}
               <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
-                <img
-                  src={encodeImagePath(project.mannequinImage)}
+                <OptimizedImage
+                  src={project.mannequinImage}
                   alt={`${project.name} - Mannequin`}
                   loading="eager"
+                  priority={1}
                   className="w-full h-auto object-contain z-10 p-4"
                 />
                 <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
@@ -143,10 +147,11 @@ const ProjectDetail = ({ project, category, onBack }) => {
                 {/* Vector Image */}
                 <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
-                  <img
-                    src={encodeImagePath(project.vectorImage)}
+                  <OptimizedImage
+                    src={project.vectorImage}
                     alt={`${project.name} - Vector`}
                     loading="eager"
+                    priority={1}
                     className="w-full h-auto object-contain z-10 p-8"
                   />
                   <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
@@ -157,10 +162,11 @@ const ProjectDetail = ({ project, category, onBack }) => {
                 {/* Mannequin Image */}
                 <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
-                  <img
-                    src={encodeImagePath(project.mannequinImage)}
+                  <OptimizedImage
+                    src={project.mannequinImage}
                     alt={`${project.name} - Mannequin`}
                     loading="eager"
+                    priority={1}
                     className="w-full h-auto object-contain z-10 p-4"
                   />
                   <div className="absolute bottom-0 left-0 right-0 py-3 text-center bg-gradient-to-t from-black/50 to-transparent z-20">
@@ -179,10 +185,11 @@ const ProjectDetail = ({ project, category, onBack }) => {
             className="mb-8 rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
-            <img
-              src={encodeImagePath(project.mannequinImage || project.image || project.tempImage)}
+            <OptimizedImage
+              src={project.mannequinImage || project.image || project.tempImage}
               alt={project.name || project.title}
               loading="eager"
+              priority={1}
               className="w-full h-auto object-contain relative z-10"
             />
           </motion.div>
@@ -236,12 +243,13 @@ const ProjectDetail = ({ project, category, onBack }) => {
           >
             {project.additionalImages.map((img, i) => (
               <div key={i} className="rounded-2xl overflow-hidden bg-gray-900">
-                <img
+                <OptimizedImage
                   src={img}
                   alt={`${project.title} - ${i + 1}`}
                   loading="lazy"
+                  priority={8}
+                  placeholder={true}
                   className="w-full h-auto object-cover"
-                  style={{ backgroundColor: '#1a1a1a' }}
                 />
               </div>
             ))}
@@ -259,6 +267,25 @@ const ProjectGallery = ({ category, onBack }) => {
 
   // Gerçek projeleri kullan - eğer varsa
   const projects = category.projects || [];
+
+  // İlk 10 + 5 projeyi preload et
+  useEffect(() => {
+    if (projects.length > 0) {
+      const imagesToPreload = projects.slice(0, 15).map(p =>
+        encodeImagePath(p.mannequinImage || p.image)
+      );
+
+      // İlk 10'u yüksek öncelikle
+      preloadImages(imagesToPreload.slice(0, 10), 3, 1);
+
+      // Sonraki 5'i düşük öncelikle
+      if (imagesToPreload.length > 10) {
+        setTimeout(() => {
+          preloadImages(imagesToPreload.slice(10), 2, 5);
+        }, 500);
+      }
+    }
+  }, [projects]);
 
   return createPortal(
     <>
@@ -309,13 +336,14 @@ const ProjectGallery = ({ category, onBack }) => {
                     className="break-inside-avoid relative group rounded-2xl overflow-hidden bg-gray-900 cursor-pointer"
                     onClick={() => setSelectedProject(project)}
                   >
-                    <img
-                      src={encodeImagePath(project.mannequinImage || project.image)}
+                    <OptimizedImage
+                      src={project.mannequinImage || project.image}
                       alt={project.name}
-                      loading="lazy"
+                      loading={index < 10 ? 'eager' : 'lazy'}
+                      priority={index < 10 ? 2 : 7}
+                      placeholder={true}
                       className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                      style={{ minHeight: '200px', backgroundColor: '#1a1a1a' }}
-                      onLoad={(e) => e.target.style.backgroundColor = 'transparent'}
+                      style={{ minHeight: '200px' }}
                     />
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <span className="text-white font-medium px-4 py-2 border border-white/30 rounded-full backdrop-blur-sm">
@@ -464,6 +492,12 @@ const PortfolioContainer = ({ setCursorVariant }) => {
     projects: cat.projects
   }));
 
+  // Ana kategori kartlarının ilk 10'unu preload et
+  useEffect(() => {
+    const cardImages = categories.slice(0, 10).map(cat => encodeImagePath(cat.image));
+    preloadImages(cardImages, 3, 1);
+  }, []);
+
   const totalCards = categories.length;
   const cardWidth = isMobile ? 200 : isTablet ? 260 : 340;
   const cardHeight = isMobile ? 280 : isTablet ? 380 : 500;
@@ -510,7 +544,7 @@ const PortfolioContainer = ({ setCursorVariant }) => {
           <ProjectGallery
             key="gallery"
             category={selectedCategory}
-            onBack={() => setSelectedCategory(null)}
+            onBack={() => { setIsStackHovered(false); setSelectedCategory(null) }}
           />
         ) : (
           <motion.div
@@ -562,6 +596,7 @@ const PortfolioContainer = ({ setCursorVariant }) => {
                   rotateX: rotateX,
                   rotateY: rotateY,
                   transformStyle: 'preserve-3d',
+                  willChange: 'transform', // Force hardware acceleration
                 }}
               >
                 {categories.map((category, index) => {
@@ -577,6 +612,7 @@ const PortfolioContainer = ({ setCursorVariant }) => {
                         height: cardHeight,
                         zIndex: pos.zIndex,
                         transformStyle: 'preserve-3d',
+                        willChange: 'transform', // Force hardware acceleration
                       }}
                       animate={{
                         x: pos.x,
@@ -620,13 +656,13 @@ const PortfolioContainer = ({ setCursorVariant }) => {
                           </div>
                         ) : (
                           <>
-                            <img
-                              src={encodeImagePath(category.image)}
+                            <OptimizedImage
+                              src={category.image}
                               alt={category.title}
                               loading="eager"
+                              priority={index < 4 ? 1 : 3}
+                              placeholder={true}
                               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                              style={{ backgroundColor: '#1a1a1a' }}
-                              onLoad={(e) => e.target.classList.add('loaded')}
                             />
                             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-300" />
                             <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
