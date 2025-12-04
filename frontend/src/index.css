@@ -1,4 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@font-face {
+    font-family: 'Aequitas';
+    src: url('/AequitasBold.ttf?v=4') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
 @tailwind base;
 @tailwind components;
@@ -81,20 +88,33 @@ code {
 
     body {
         @apply text-foreground;
-        background: linear-gradient(to bottom,
-                #0c5f4d 0%,
-                #07151D 10%,
-                #080C18 20%,
-                #080B18 30%,
-                #080C1F 40%,
-                #081027 50%,
-                #08162D 60%,
-                #111D2E 70%,
-                #372A27 80%,
-                #65371C 90%,
-                #864114 100%);
+        background-image:
+            radial-gradient(ellipse 100% 50% at 50% -20%, #19b493 0%, transparent 65%),
+            radial-gradient(ellipse 100% 50% at 50% 120%, #19b493 0%, transparent 65%),
+            linear-gradient(to bottom,
+                #080b17 0%,
+                #091218 13%,
+                #14221e 40%,
+                #14221e 60%,
+                #091218 87%,
+                #080b17 100%);
         min-height: 100vh;
         position: relative;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
+        z-index: 40;
+        pointer-events: none;
     }
 
     body::after {
@@ -106,7 +126,7 @@ code {
         height: 100%;
         pointer-events: none;
         z-index: 50;
-        opacity: 0.07;
+        opacity: 0.05;
         background-repeat: repeat;
         background-size: 128px 128px;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -162,4 +182,41 @@ code {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
+}
+
+/* Global Styles from App.css */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Global Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Selection */
+::selection {
+    background: rgba(139, 92, 246, 0.3);
+    color: #fff;
+}
+
+/* Prevent text selection on interactive elements */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

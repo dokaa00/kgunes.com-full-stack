@@ -16,7 +16,7 @@ const ContactSection = () => {
     message: ''
   });
   const [isHovered, setIsHovered] = useState(false);
-  
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -42,9 +42,9 @@ const ContactSection = () => {
       const chars = titleRef.current?.querySelectorAll('.char');
       if (!chars || chars.length === 0) return;
 
-      gsap.set(chars, { 
-        opacity: 0, 
-        y: 100, 
+      gsap.set(chars, {
+        opacity: 0,
+        y: 100,
         rotateX: -90,
         filter: 'blur(10px)'
       });
@@ -73,15 +73,15 @@ const ContactSection = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Email gönderimi için mailto link oluştur
     const subject = encodeURIComponent(`İletişim: ${formData.name}`);
     const body = encodeURIComponent(
       `İsim: ${formData.name}\nEmail: ${formData.email}\n\nMesaj:\n${formData.message}`
     );
-    
+
     window.location.href = `mailto:kaangunes2009@gmail.com?subject=${subject}&body=${body}`;
-    
+
     // Form'u temizle
     setFormData({
       name: '',
@@ -100,18 +100,7 @@ const ContactSection = () => {
   return (
     <section className="relative min-h-screen bg-transparent py-32 px-6 overflow-hidden">
       {/* Animated Background Blobs */}
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
-        style={{ x, y }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
-        style={{ x: useTransform(x, (value) => -value), y: useTransform(y, (value) => -value) }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-3xl"
-        style={{ x: useTransform(x, (value) => value * 0.5), y: useTransform(y, (value) => value * 0.5) }}
-      />
+
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
@@ -121,20 +110,20 @@ const ContactSection = () => {
           style={{ perspective: '1000px' }}
         >
           <h2 className="text-6xl md:text-8xl font-extrabold text-white mb-6 tracking-tight inline-block">
-            {t('contact.title').split('').map((char, i) => (
-              <span 
-                key={i} 
+            {Array.from(t('contact.title')).map((char, i) => (
+              <span
+                key={i}
                 className="char inline-block"
-                style={{ 
+                style={{
                   transformStyle: 'preserve-3d',
-                  display: char === ' ' ? 'inline' : 'inline-block'
+                  display: char.trim() === '' ? 'inline' : 'inline-block'
                 }}
               >
                 {char === ' ' ? '\u00A0' : char}
               </span>
             ))}
           </h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
             whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             viewport={{ once: true }}
@@ -154,10 +143,10 @@ const ContactSection = () => {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-2xl border border-white/20 p-10">
+            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-2xl border border-white/10 p-10">
               {/* Glossy overlay */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-40" />
-              
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-30" />
+
               {/* Animated shimmer */}
               <motion.div
                 className="absolute inset-0 opacity-0"
@@ -179,13 +168,13 @@ const ContactSection = () => {
               {/* Content */}
               <div className="relative z-10 space-y-8">
                 <h3 className="text-3xl font-bold text-white mb-8">{t('contact.infoTitle')}</h3>
-                
+
                 <motion.a
                   href="mailto:kaangunes2009@gmail.com"
                   whileHover={{ x: 10 }}
                   className="flex items-center gap-4 group"
                 >
-                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 group-hover:bg-white/20 transition-colors">
+                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 group-hover:bg-white/20 transition-colors">
                     <Mail className="text-white" size={24} />
                   </div>
                   <div>
@@ -198,7 +187,7 @@ const ContactSection = () => {
                   whileHover={{ x: 10 }}
                   className="flex items-center gap-4 group"
                 >
-                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 group-hover:bg-white/20 transition-colors">
+                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 group-hover:bg-white/20 transition-colors">
                     <MapPin className="text-white" size={24} />
                   </div>
                   <div>
@@ -217,7 +206,7 @@ const ContactSection = () => {
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors group"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/20 transition-colors group"
                     >
                       <Linkedin className="text-white flex-shrink-0" size={20} />
                       <span className="text-white font-medium text-sm">LinkedIn</span>
@@ -228,7 +217,7 @@ const ContactSection = () => {
                       rel="noopener noreferrer"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors group"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:bg-white/20 transition-colors group"
                     >
                       <Instagram className="text-white flex-shrink-0" size={20} />
                       <span className="text-white font-medium text-sm">Instagram</span>
@@ -250,10 +239,10 @@ const ContactSection = () => {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-2xl border border-white/20 p-10">
+            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-2xl border border-white/10 p-10">
               {/* Glossy overlay */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-40" />
-              
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent opacity-30" />
+
               {/* Content */}
               <form onSubmit={handleSubmit} className="relative z-10 space-y-6">
                 <h3 className="text-3xl font-bold text-white mb-8">{t('contact.formTitle')}</h3>
@@ -265,7 +254,7 @@ const ContactSection = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all"
                     placeholder={t('contact.formNamePlaceholder')}
                     required
                   />
@@ -278,7 +267,7 @@ const ContactSection = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all"
                     placeholder={t('contact.formEmailPlaceholder')}
                     required
                   />
@@ -291,7 +280,7 @@ const ContactSection = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows="6"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/20 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder-white/30 focus:bg-white/10 focus:border-white/40 focus:outline-none transition-all resize-none"
                     placeholder={t('contact.formMessagePlaceholder')}
                     required
                   />

@@ -6,7 +6,7 @@ import { ArrowRight, Circle } from 'lucide-react';
 import CardStack3D from './components/CardStack3D';
 import ContactSection from './components/ContactSection';
 import SkillsSection from './components/SkillsSection';
-import './App.css';
+
 
 // Signature Animation Component (Placeholder SVG)
 const SignatureAnimation = () => {
@@ -123,13 +123,59 @@ const MainContent = ({ language, setLanguage }) => {
   const { t } = useTranslation();
 
   // Custom cursor animation
-  const cursorX = useMotionValue(0);
-  const cursorY = useMotionValue(0);
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const [cursorVariant, setCursorVariant] = useState('default');
 
-  // Direct motion values for instant follow
-  // const springConfig = { damping: 35, stiffness: 400, mass: 0.5 };
+  // Removed spring physics for instant tracking
+  // const springConfig = { damping: 25, stiffness: 700 };
   // const cursorXSpring = useSpring(cursorX, springConfig);
   // const cursorYSpring = useSpring(cursorY, springConfig);
+
+
+
+
+
+  // Smooth out the deformation
+
+
+  useEffect(() => {
+    const moveCursor = (e) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+    };
+    window.addEventListener('mousemove', moveCursor);
+    return () => window.removeEventListener('mousemove', moveCursor);
+  }, [cursorX, cursorY]);
+
+  const variants = {
+    default: {
+      width: 32,
+      height: 32,
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      borderWidth: 2,
+      borderColor: "rgba(255, 255, 255, 0.4)",
+      mixBlendMode: "difference"
+    },
+    project: {
+      width: 96,
+      height: 96,
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      borderWidth: 1,
+      borderColor: "rgba(255, 255, 255, 0.2)",
+      mixBlendMode: "normal",
+      backdropFilter: "blur(4px)"
+    },
+    skills: {
+      width: 120,
+      height: 120,
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      borderWidth: 0,
+      borderColor: "rgba(255, 255, 255, 0)",
+      mixBlendMode: "normal",
+      backdropFilter: "none"
+    }
+  };
 
   const { scrollY } = useScroll();
 
@@ -143,16 +189,7 @@ const MainContent = ({ language, setLanguage }) => {
   const heroY = useTransform(scrollY, [0, 500, 1200], [0, 0, -800]);
   const heroOpacity = useTransform(scrollY, [800, 1200], [1, 0]);
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      // Direct update without delay
-      cursorX.set(e.clientX - 16);
-      cursorY.set(e.clientY - 16);
-    };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [cursorX, cursorY]);
 
   return (
     <>
@@ -173,12 +210,35 @@ const MainContent = ({ language, setLanguage }) => {
 
       {/* Custom Cursor */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border-2 border-white/40 pointer-events-none z-[9999] mix-blend-difference"
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] flex items-center justify-center"
         style={{
           x: cursorX,
           y: cursorY,
+          translateX: '-50%',
+          translateY: '-50%',
         }}
-      />
+        variants={variants}
+        animate={cursorVariant}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 28,
+          mass: 0.5
+        }}
+      >
+        <AnimatePresence>
+          {cursorVariant === 'project' && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              className="text-white text-[10px] font-medium tracking-widest uppercase text-center px-2 font-sans"
+            >
+              {t('cards.exploreProject')}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
       {/* Main Container */}
       <div className="relative min-h-screen w-full">
@@ -191,11 +251,11 @@ const MainContent = ({ language, setLanguage }) => {
           className="fixed top-0 left-0 right-0 z-50 px-8 md:px-16 py-8"
         >
           <div className="flex justify-between items-center">
-            <div className="text-white/90 font-['Inter'] text-sm tracking-wider uppercase">
+            <div className="text-white/90 font-sans text-sm tracking-wider uppercase">
               Kaan Güneş
             </div>
             <div className="flex items-center gap-8 md:gap-12">
-              <div className="hidden md:flex gap-8 text-white/70 font-['Inter'] text-sm">
+              <div className="hidden md:flex gap-8 text-white/70 font-sans text-sm">
                 <a href="#work" className="hover:text-white transition-colors duration-300">Work</a>
                 <a href="#skills" className="hover:text-white transition-colors duration-300">Skills</a>
                 <a href="#contact" className="hover:text-white transition-colors duration-300">Contact</a>
@@ -215,7 +275,7 @@ const MainContent = ({ language, setLanguage }) => {
               transition={{ duration: 1, delay: 0.4 }}
               className="space-y-8 flex flex-col items-center"
             >
-              <h1 className="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-light text-white/95 leading-[1.1] tracking-tight">
+              <h1 className="font-aequitas text-6xl md:text-8xl lg:text-9xl xl:text-[10rem] font-normal text-white/95 leading-[1.1] tracking-tight">
                 Kaan Güneş
               </h1>
 
@@ -223,27 +283,12 @@ const MainContent = ({ language, setLanguage }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="font-['Inter'] text-lg md:text-xl text-white/60 max-w-2xl leading-relaxed"
+                className="font-sans text-lg md:text-xl text-white/60 max-w-2xl leading-relaxed"
               >
                 {t('hero.bio')}
               </motion.p>
 
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 1 }}
-                whileHover={{ x: 10 }}
-                onClick={() => {
-                  document.getElementById('work')?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }}
-                className="group flex items-center gap-3 mt-12 text-white/90 font-['Inter'] text-sm tracking-wider uppercase pointer-events-auto"
-              >
-                <span>{t('hero.explore')}</span>
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
-              </motion.button>
+
             </motion.div>
           </div>
         </section>
@@ -254,37 +299,21 @@ const MainContent = ({ language, setLanguage }) => {
           <div className="h-[150vh]" />
 
           {/* Featured Work Label */}
-          <section id="work" className="px-8 md:px-16 pb-12 pt-24 bg-gradient-to-b from-transparent to-black/20 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="max-w-7xl w-full mx-auto"
-            >
-              <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16">
-                <Circle className="w-2 h-2 fill-current" />
-                <span>{t('sections.selectedWorks')}</span>
-              </div>
-            </motion.div>
-          </section>
+
 
           {/* Work Section (CardStack3D) */}
-          <section className="pb-32 bg-black/20 backdrop-blur-sm">
-            <CardStack3D />
+          <section className="pb-32">
+            <CardStack3D setCursorVariant={setCursorVariant} />
           </section>
 
           {/* Skills Section */}
-          <section id="skills" className="pb-32 bg-black/20 backdrop-blur-sm">
-            <div className="flex items-center gap-3 text-white/50 font-['Inter'] text-xs tracking-widest uppercase mb-16 px-8 md:px-16 max-w-7xl mx-auto">
-              <Circle className="w-2 h-2 fill-current" />
-              <span>{t('sections.skills')}</span>
-            </div>
-            <SkillsSection />
+          <section id="skills" className="pb-32">
+
+            <SkillsSection setCursorVariant={setCursorVariant} />
           </section>
 
           {/* Footer / Contact Section */}
-          <section id="contact" className="pb-16 bg-black/20 backdrop-blur-sm">
+          <section id="contact" className="pb-16">
             <div className="max-w-7xl w-full mx-auto px-8 md:px-16">
               <motion.div
                 initial={{ opacity: 0 }}
@@ -295,10 +324,10 @@ const MainContent = ({ language, setLanguage }) => {
               >
                 <div className="grid grid-cols-1 gap-12">
                   <div>
-                    <h2 className="font-['Playfair_Display'] text-4xl md:text-5xl font-light text-white/95 mb-6 leading-tight whitespace-pre-line">
+                    <h2 className="font-serif text-4xl md:text-5xl font-light text-white/95 mb-6 leading-tight whitespace-pre-line">
                       {t('footer.title')}
                     </h2>
-                    <p className="font-['Inter'] text-white/60 leading-relaxed mb-12">
+                    <p className="font-sans font-light text-white/60 leading-relaxed mb-12">
                       {t('footer.description')}
                     </p>
 
@@ -306,13 +335,8 @@ const MainContent = ({ language, setLanguage }) => {
                   </div>
                 </div>
 
-                <div className="mt-24 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-white/40 font-['Inter'] text-xs">
+                <div className="mt-24 flex justify-center items-center text-white/40 font-sans text-xs">
                   <p>{t('footer.copyright')}</p>
-                  <div className="flex gap-8">
-                    <a href="#" className="hover:text-white/70 transition-colors">Instagram</a>
-                    <a href="#" className="hover:text-white/70 transition-colors">Twitter</a>
-                    <a href="#" className="hover:text-white/70 transition-colors">LinkedIn</a>
-                  </div>
                 </div>
               </motion.div>
             </div>

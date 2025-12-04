@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useMotionValue, useSpring, useTransform, useVelocity } from 'framer-motion';
 
-const SkillsSection = () => {
+const SkillsSection = ({ setCursorVariant }) => {
   const { t } = useTranslation();
   const containerRef = useRef(null);
 
@@ -10,35 +10,14 @@ const SkillsSection = () => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smooth spring animation for the cursor center
-  const springConfig = { damping: 28, stiffness: 400, mass: 0.5 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
 
-  // Velocity for deformation
-  const velocityX = useVelocity(springX);
-  const velocityY = useVelocity(springY);
 
-  // Calculate speed and angle
-  const speed = useTransform([velocityX, velocityY], ([vx, vy]) => Math.sqrt(vx * vx + vy * vy));
-  const angle = useTransform([velocityX, velocityY], ([vx, vy]) => {
-    if (vx === 0 && vy === 0) return 0;
-    return (Math.atan2(vy, vx) * 180) / Math.PI;
-  });
+  // Base radius - matched to global cursor (approx 60px radius)
+  const baseRadius = 60;
 
-  // Base radius
-  const baseRadius = 150;
-
-  // Stretch factor based on speed
-  // rx increases (stretch), ry decreases (squash)
-  const stretch = useTransform(speed, [0, 2000], [0, 50]);
-  const rx = useTransform(stretch, s => baseRadius + s);
-  const ry = useTransform(stretch, s => baseRadius - s * 0.5); // Squash less than stretch to keep visibility
-
-  // Smooth the deformation
-  const smoothRx = useSpring(rx, { damping: 20, stiffness: 200 });
-  const smoothRy = useSpring(ry, { damping: 20, stiffness: 200 });
-  const smoothAngle = useSpring(angle, { damping: 20, stiffness: 200 });
+  // Simple reveal radius
+  const rx = useMotionValue(baseRadius);
+  const ry = useMotionValue(baseRadius);
 
   // Reveal radius (for entering/leaving)
   const revealScale = useMotionValue(0);
@@ -55,14 +34,20 @@ const SkillsSection = () => {
     revealScale.set(1);
   };
 
+  const handleMouseEnter = () => {
+    if (setCursorVariant) setCursorVariant('skills');
+    revealScale.set(1);
+  };
+
   const handleMouseLeave = () => {
+    if (setCursorVariant) setCursorVariant('default');
     revealScale.set(0);
   };
 
   return (
     <section className="relative py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl md:text-6xl font-bold text-white text-center mb-16">{t('skills.title')}</h2>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Sol Taraf - Açıklama */}
@@ -86,11 +71,9 @@ const SkillsSection = () => {
                   <motion.ellipse
                     cx={mouseX}
                     cy={mouseY}
-                    rx={smoothRx}
-                    ry={smoothRy}
+                    rx={rx}
+                    ry={ry}
                     style={{
-                      transformOrigin: useTransform(() => `${mouseX.get()}px ${mouseY.get()}px`), // Rotate around current mouse position
-                      rotate: smoothAngle,
                       scale: revealScaleSpring
                     }}
                   />
@@ -102,6 +85,7 @@ const SkillsSection = () => {
               ref={containerRef}
               className="relative w-full overflow-hidden rounded-lg shadow-2xl cursor-none"
               onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
               {/* Background Image (After) */}

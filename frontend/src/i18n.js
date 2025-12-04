@@ -19,6 +19,7 @@ const resources = {
         exploreProject: 'Projeyi İncele',
         worksCount: '{{count}} Çalışma',
         projectListCount: '{{count}} Proje Listeleniyor',
+        comingSoon: 'Yakında',
       },
       nav: {
         contact: 'İletişime Geç',
@@ -152,6 +153,7 @@ const resources = {
         exploreProject: 'View Project',
         worksCount: '{{count}} Works',
         projectListCount: '{{count}} Projects Listed',
+        comingSoon: 'Coming Soon',
       },
       nav: {
         contact: 'Get In Touch',
@@ -285,6 +287,7 @@ const resources = {
         exploreProject: 'Projekt ansehen',
         worksCount: '{{count}} Arbeiten',
         projectListCount: '{{count}} Projekte gelistet',
+        comingSoon: 'Demnächst',
       },
       nav: {
         contact: 'Kontakt',
@@ -418,6 +421,7 @@ const resources = {
         exploreProject: 'Vedi progetto',
         worksCount: '{{count}} lavori',
         projectListCount: '{{count}} progetti elencati',
+        comingSoon: 'Prossimamente',
       },
       nav: {
         contact: 'Contattami',

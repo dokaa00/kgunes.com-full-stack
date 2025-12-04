@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { Folder, ArrowLeft, X, Calendar, Tag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -50,17 +51,17 @@ const ProjectDetail = ({ project, category, onBack }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[60] bg-[#050505] overflow-y-auto"
+      className="fixed inset-0 z-[70] bg-[#050505] overflow-y-auto"
     >
       {/* Header */}
       <div className="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-white/10 p-6 flex justify-between items-center">
-        <button 
+        <button
           onClick={onBack}
           className="p-3 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white"
         >
           <ArrowLeft size={24} />
         </button>
-        <button 
+        <button
           onClick={onBack}
           className="p-3 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white"
         >
@@ -103,8 +104,8 @@ const ProjectDetail = ({ project, category, onBack }) => {
               className="mb-8 max-w-5xl mx-auto space-y-6"
             >
               {/* Vector Image - Küçük */}
-              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+              <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
                 <img
                   src={encodeImagePath(project.vectorImage)}
                   alt={`${project.name} - Vector`}
@@ -117,8 +118,8 @@ const ProjectDetail = ({ project, category, onBack }) => {
               </div>
 
               {/* Mannequin Image - Büyük */}
-              <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+              <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
                 <img
                   src={encodeImagePath(project.mannequinImage)}
                   alt={`${project.name} - Mannequin`}
@@ -140,8 +141,8 @@ const ProjectDetail = ({ project, category, onBack }) => {
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl items-start">
                 {/* Vector Image */}
-                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+                <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
                   <img
                     src={encodeImagePath(project.vectorImage)}
                     alt={`${project.name} - Vector`}
@@ -154,8 +155,8 @@ const ProjectDetail = ({ project, category, onBack }) => {
                 </div>
 
                 {/* Mannequin Image */}
-                <div className="rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+                <div className="rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
                   <img
                     src={encodeImagePath(project.mannequinImage)}
                     alt={`${project.name} - Mannequin`}
@@ -175,9 +176,9 @@ const ProjectDetail = ({ project, category, onBack }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-8 rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl relative"
+            className="mb-8 rounded-[32px] overflow-hidden bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl border border-white/5 shadow-2xl relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-30"></div>
             <img
               src={encodeImagePath(project.mannequinImage || project.image || project.tempImage)}
               alt={project.name || project.title}
@@ -195,14 +196,14 @@ const ProjectDetail = ({ project, category, onBack }) => {
           className="space-y-6"
         >
           <div className="prose prose-invert max-w-none">
-            <p className="text-xl text-white/80 leading-relaxed mb-6">
+            <p className="text-xl text-white/80 leading-relaxed mb-6 font-light">
               {project.description || t('project.defaultDescription', { category: category.title, project: project.title })}
             </p>
-            
+
             {project.details && (
               <div className="text-white/70 space-y-4">
                 {project.details.map((detail, i) => (
-                  <p key={i} className="text-lg leading-relaxed">
+                  <p key={i} className="text-lg leading-relaxed font-light">
                     {detail}
                   </p>
                 ))}
@@ -216,7 +217,7 @@ const ProjectDetail = ({ project, category, onBack }) => {
               {project.tags.map((tag, i) => (
                 <span
                   key={i}
-                  className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/70 text-sm"
+                  className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/70 text-sm font-light"
                 >
                   {tag}
                 </span>
@@ -259,7 +260,7 @@ const ProjectGallery = ({ category, onBack }) => {
   // Gerçek projeleri kullan - eğer varsa
   const projects = category.projects || [];
 
-  return (
+  return createPortal(
     <>
       <AnimatePresence mode="wait">
         {selectedProject ? (
@@ -270,18 +271,18 @@ const ProjectGallery = ({ category, onBack }) => {
             onBack={() => setSelectedProject(null)}
           />
         ) : (
-          <motion.div 
+          <motion.div
             key="gallery"
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 100 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 bg-[#050505] overflow-y-auto"
+            className="fixed inset-0 z-[60] bg-[#050505] overflow-y-auto"
           >
-        {/* Üst Bar */}
+            {/* Üst Bar */}
             <div className="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-white/10 p-6 flex justify-between items-center">
               <div className="flex items-center gap-4">
-                <button 
+                <button
                   onClick={onBack}
                   className="p-3 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white"
                 >
@@ -308,8 +309,8 @@ const ProjectGallery = ({ category, onBack }) => {
                     className="break-inside-avoid relative group rounded-2xl overflow-hidden bg-gray-900 cursor-pointer"
                     onClick={() => setSelectedProject(project)}
                   >
-                    <img 
-                      src={encodeImagePath(project.mannequinImage || project.image)} 
+                    <img
+                      src={encodeImagePath(project.mannequinImage || project.image)}
                       alt={project.name}
                       loading="lazy"
                       className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
@@ -328,127 +329,89 @@ const ProjectGallery = ({ category, onBack }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </>,
+    document.body
   );
 };
 
+// --- 3. ANA BİLEŞEN (CARD STACK) ---
 
-// --- 2. ANA BİLEŞEN (CARD STACK) ---
-const PortfolioContainer = () => {
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3
+    }
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.43, 0.13, 0.23, 0.96]
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: 20,
+    transition: { duration: 0.3 }
+  }
+};
+
+const titleCharVariants = {
+  hidden: { opacity: 0, y: 50, rotateX: -90 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: {
+      type: "spring",
+      damping: 12,
+      stiffness: 100
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -50,
+    rotateX: 90,
+    transition: { duration: 0.3 }
+  }
+};
+
+const PortfolioContainer = ({ setCursorVariant }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [isStackHovered, setIsStackHovered] = useState(false);
-  
-  const sectionRef = useRef(null);
-  const titleRef = useRef(null);
-  const cardsContainerRef = useRef(null);
-  const bottomTextRef = useRef(null);
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      const chars = titleRef.current?.querySelectorAll('.char');
-    
-      if (chars && chars.length > 0) {
-        gsap.set(chars, {
-          opacity: 0,
-          filter: 'blur(30px)',
-          scale: 1.3,
-          y: 20,
-        });
-
-        gsap.to(chars, {
-          opacity: 1,
-          filter: 'blur(0px)',
-          scale: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: {
-            each: 0.05,
-            from: "center",
-          },
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            toggleActions: "play none none reverse"
-          }
-        });
+  useEffect(() => {
+    if (setCursorVariant) {
+      if (selectedCategory) {
+        setCursorVariant('default');
+      } else {
+        setCursorVariant(isStackHovered ? 'project' : 'default');
       }
-
-      const subtitle = titleRef.current?.querySelector('.subtitle');
-      if (subtitle) {
-        gsap.fromTo(subtitle,
-          {
-            opacity: 0,
-            filter: 'blur(20px)',
-            y: 20,
-          },
-          {
-            opacity: 1,
-            filter: 'blur(0px)',
-            y: 0,
-            duration: 0.6,
-            delay: 0.4,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 80%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-      }
-
-      gsap.fromTo(cardsContainerRef.current,
-        {
-          y: 150,
-          opacity: 0,
-          scale: 0.9,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1.4,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 60%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-      gsap.fromTo(bottomTextRef.current,
-        {
-          y: 30,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          delay: 0.5,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 40%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [selectedCategory]);
+    }
+  }, [isStackHovered, selectedCategory, setCursorVariant]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const springConfig = { damping: 25, stiffness: 120, mass: 0.5 };
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [18, -18]), springConfig); 
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-25, 25]), springConfig); 
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [18, -18]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-25, 25]), springConfig);
 
   const handleMouseMove = (e) => {
     const { clientX, clientY, currentTarget } = e;
@@ -458,7 +421,7 @@ const PortfolioContainer = () => {
     mouseX.set(x);
     mouseY.set(y);
   };
-  
+
   const handleMouseLeave = () => {
     setIsStackHovered(false);
     setHoveredIndex(null);
@@ -472,7 +435,7 @@ const PortfolioContainer = () => {
       mouseX.set(x);
       mouseY.set(y);
     };
-    
+
     window.addEventListener('mousemove', handleGlobalMouseMove);
     return () => window.removeEventListener('mousemove', handleGlobalMouseMove);
   }, [mouseX, mouseY]);
@@ -502,28 +465,28 @@ const PortfolioContainer = () => {
   }));
 
   const totalCards = categories.length;
-  const cardWidth = isMobile ? 200 : isTablet ? 260 : 340; 
+  const cardWidth = isMobile ? 200 : isTablet ? 260 : 340;
   const cardHeight = isMobile ? 280 : isTablet ? 380 : 500;
-  
+
   const calculatePosition = (index) => {
-    const baseSpacing = isMobile 
-      ? (isStackHovered ? 50 : 35) 
-      : isTablet 
-        ? (isStackHovered ? 90 : 60) 
+    const baseSpacing = isMobile
+      ? (isStackHovered ? 50 : 35)
+      : isTablet
+        ? (isStackHovered ? 90 : 60)
         : (isStackHovered ? 140 : 100);
-    
+
     const hoverOffset = isMobile ? 100 : isTablet ? 150 : 200;
-    
+
     let offset = 0;
-    let dynamicZIndex = totalCards - index; 
+    let dynamicZIndex = totalCards - index;
 
     if (hoveredIndex !== null) {
-        if (index < hoveredIndex) offset = -hoverOffset; 
-        else if (index > hoveredIndex) offset = hoverOffset; 
-        
-        if (index === hoveredIndex) dynamicZIndex = 50;
-        else if (index < hoveredIndex) dynamicZIndex = index + 1; 
-        else dynamicZIndex = totalCards - index;
+      if (index < hoveredIndex) offset = -hoverOffset;
+      else if (index > hoveredIndex) offset = hoverOffset;
+
+      if (index === hoveredIndex) dynamicZIndex = 50;
+      else if (index < hoveredIndex) dynamicZIndex = index + 1;
+      else dynamicZIndex = totalCards - index;
     }
 
     const totalWidth = (totalCards - 1) * baseSpacing;
@@ -534,137 +497,154 @@ const PortfolioContainer = () => {
       x: xPosition,
       rotateZ: index * 1,
       scale: 1 - (index * 0.04),
-      zIndex: dynamicZIndex, 
+      zIndex: dynamicZIndex,
     };
   };
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen py-8 bg-transparent font-sans">
-      
+    <section className="relative min-h-screen py-8 bg-transparent font-sans cursor-none">
+
       <AnimatePresence mode="wait">
-        
+
         {selectedCategory ? (
-          <ProjectGallery 
-            key="gallery" 
-            category={selectedCategory} 
-            onBack={() => setSelectedCategory(null)} 
+          <ProjectGallery
+            key="gallery"
+            category={selectedCategory}
+            onBack={() => setSelectedCategory(null)}
           />
         ) : (
           <motion.div
-             key="stack"
-             className="relative w-full h-full min-h-[600px] md:min-h-[800px] lg:min-h-[1000px] flex flex-col justify-center items-center pt-32"
-             exit={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-             transition={{ duration: 0.5 }}
+            key="stack"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="relative w-full h-full min-h-[600px] md:min-h-[800px] lg:min-h-[1000px] flex flex-col justify-center items-center pt-32"
           >
-              <div
-                ref={titleRef}
-                className="absolute top-4 md:-top-4 left-0 right-0 text-center z-10 mb-10 md:mb-20 px-4"
-                style={{ perspective: '1000px' }}
-              >
-                <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold text-white font-handwriting inline-block">
-                  {titleText.split('').map((char, i) => (
-                    <span 
-                      key={i} 
-                      className="char inline-block"
-                      style={{ 
-                        transformStyle: 'preserve-3d',
-                        display: char === ' ' ? 'inline' : 'inline-block'
-                      }}
-                    >
-                      {char === ' ' ? '\u00A0' : char}
-                    </span>
-                  ))}
-                </h2>
-                <div className="mt-2 md:mt-4 overflow-hidden">
-                  <p className="subtitle text-white/40 text-xs sm:text-sm md:text-lg tracking-widest uppercase">{t('cards.subtitle')}</p>
-                </div>
-              </div>
-              <div 
-                ref={cardsContainerRef}
-                className="relative w-full h-full flex justify-center items-center mt-8 md:mt-16 px-4"
-                onMouseEnter={() => setIsStackHovered(true)}
-                onMouseLeave={() => setIsStackHovered(false)}
-                style={{ perspective: isMobile ? '1000px' : '2000px' }} 
-              >
-                <motion.div
-                    className="relative flex justify-center items-center"
+            <div
+              className="absolute top-4 md:-top-4 left-0 right-0 text-center z-[60] mb-10 md:mb-20 px-4"
+              style={{ perspective: '1000px' }}
+            >
+              <h2 className="text-5xl sm:text-6xl md:text-8xl lg:text-[10rem] text-white font-aequitas inline-block">
+                {titleText.split('').map((char, i) => (
+                  <motion.span
+                    key={i}
+                    variants={titleCharVariants}
+                    className="char inline-block"
                     style={{
-                        rotateX: rotateX,
-                        rotateY: rotateY,
-                        transformStyle: 'preserve-3d',
+                      transformStyle: 'preserve-3d',
+                      display: char === ' ' ? 'inline' : 'inline-block'
                     }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                ))}
+              </h2>
+              <div className="mt-2 md:mt-4 overflow-hidden">
+                <motion.p
+                  variants={itemVariants}
+                  className="subtitle text-white/40 text-xs sm:text-sm md:text-lg font-light tracking-widest uppercase"
                 >
-                    {categories.map((category, index) => {
-                    const pos = calculatePosition(index);
-                    const isHovered = hoveredIndex === index;
+                  {t('cards.subtitle')}
+                </motion.p>
+              </div>
+            </div>
+            <div
+              className="relative w-full h-full flex justify-center items-center mt-8 md:mt-16 px-4 cursor-none"
+              onMouseEnter={() => setIsStackHovered(true)}
+              onMouseLeave={() => setIsStackHovered(false)}
+              style={{ perspective: isMobile ? '1000px' : '2000px' }}
+            >
+              <motion.div
+                variants={itemVariants}
+                className="relative flex justify-center items-center"
+                style={{
+                  rotateX: rotateX,
+                  rotateY: rotateY,
+                  transformStyle: 'preserve-3d',
+                }}
+              >
+                {categories.map((category, index) => {
+                  const pos = calculatePosition(index);
+                  const isHovered = hoveredIndex === index;
 
-                    return (
-                        <motion.div
-                        key={category.id}
-                        className="absolute"
-                        style={{
-                            width: cardWidth,
-                            height: cardHeight,
-                            zIndex: pos.zIndex, 
-                            transformStyle: 'preserve-3d',
-                        }}
+                  return (
+                    <motion.div
+                      key={category.id}
+                      className="absolute"
+                      style={{
+                        width: cardWidth,
+                        height: cardHeight,
+                        zIndex: pos.zIndex,
+                        transformStyle: 'preserve-3d',
+                      }}
+                      animate={{
+                        x: pos.x,
+                        y: isHovered ? -10 : 0,
+                        rotateY: isHovered ? 0 : -15,
+                        rotateZ: isHovered ? 0 : pos.rotateZ,
+                        scale: isHovered ? 1.05 : pos.scale,
+                        z: isHovered ? 100 : 0,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 150,
+                        damping: 20,
+                        mass: 0.8,
+                        velocity: 2
+                      }}
+                      onMouseEnter={() => setHoveredIndex(index)}
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      <motion.div
+                        className={`absolute ${isMobile ? '-top-10' : isTablet ? '-top-14' : '-top-16'} left-0 w-full text-left pointer-events-none`}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{
-                            x: pos.x,
-                            y: isHovered ? -30 : 0, 
-                            rotateY: isHovered ? 0 : -15,
-                            rotateZ: isHovered ? 0 : pos.rotateZ,
-                            scale: isHovered ? 1.08 : pos.scale,
-                            z: isHovered ? 120 : 0, 
+                          opacity: isHovered ? 1 : 0,
+                          y: isHovered ? 0 : 20,
+                          scale: isHovered ? 1 : 0.8
                         }}
-                        transition={{ 
-                            type: "spring", 
-                            stiffness: 150, 
-                            damping: 20,
-                            mass: 0.8,
-                            velocity: 2
-                        }}
-                        onMouseEnter={() => setHoveredIndex(index)}
-                        onClick={() => setSelectedCategory(category)} // ARTIK STATE'i GÜNCELLİYORUZ
-                        >
-                            <motion.div
-                                className={`absolute ${isMobile ? '-top-20' : isTablet ? '-top-24' : '-top-32'} left-0 w-full text-left pointer-events-none`}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ 
-                                    opacity: isHovered ? 1 : 0, 
-                                    y: isHovered ? 0 : 20,
-                                    scale: isHovered ? 1 : 0.8
-                                }}
-                            >
-                                <h3 className={`${isMobile ? 'text-xl' : isTablet ? 'text-3xl' : 'text-4xl'} font-bold text-white mb-2 md:mb-3 font-handwriting whitespace-nowrap`} style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
-                                    {category.title}
-                                </h3>
-                                <div className="flex items-center gap-2 md:gap-3 text-white/70">
-                                    <Folder size={isMobile ? 16 : 24} />
-                                    <span className={`${isMobile ? 'text-sm' : 'text-xl'}`}>{t('cards.worksCount', { count: category.projectCount })}</span>
-                                </div>
-                            </motion.div>
+                      >
+                        <h3 className={`${isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-5xl'} font-normal text-white mb-2 md:mb-3 font-aequitas whitespace-nowrap`} style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
+                          {category.title}
+                        </h3>
+                      </motion.div>
 
-                            <div className="relative w-full h-full rounded-[40px] overflow-hidden bg-gray-900 border-[1px] border-white/20 shadow-2xl cursor-pointer group">
-                                <img 
-                                  src={encodeImagePath(category.image)} 
-                                  alt={category.title} 
-                                  loading="eager"
-                                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                  style={{ backgroundColor: '#1a1a1a' }}
-                                  onLoad={(e) => e.target.classList.add('loaded')}
-                                />
-                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-300" />
-                                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                            </div>
-                        </motion.div>
-                    );
-                    })}
-                </motion.div>
-              </div>
+                      <div className="relative w-full h-full rounded-[24px] overflow-hidden bg-gray-900 border-[1px] border-white/20 shadow-2xl transition-shadow duration-300 group-hover:shadow-[0_30px_60px_-15px_rgba(255,255,255,0.15)] cursor-pointer group">
+                        {(category.id === 5 || category.id === 6) ? (
+                          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <div className="absolute inset-0 backdrop-blur-md bg-black/30" />
+                            <span className="relative z-10 text-2xl md:text-4xl font-bold text-white/80 tracking-widest uppercase font-aequitas">
+                              {t('cards.comingSoon')}
+                            </span>
+                          </div>
+                        ) : (
+                          <>
+                            <img
+                              src={encodeImagePath(category.image)}
+                              alt={category.title}
+                              loading="eager"
+                              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              style={{ backgroundColor: '#1a1a1a' }}
+                              onLoad={(e) => e.target.classList.add('loaded')}
+                            />
+                            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-300" />
+                            <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                          </>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </div>
 
-              <div ref={bottomTextRef} className="absolute bottom-4 md:bottom-8 text-white/20 text-xs md:text-sm tracking-widest pointer-events-none">
-                {t('cards.bottomExplore')}
-              </div>
+            <motion.div
+              variants={itemVariants}
+              className="absolute bottom-4 md:bottom-8 text-white/20 text-xs md:text-sm tracking-widest pointer-events-none"
+            >
+              {t('cards.bottomExplore')}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
