@@ -499,15 +499,15 @@ const PortfolioContainer = ({ setCursorVariant }) => {
   }, []);
 
   const totalCards = categories.length;
-  const cardWidth = isMobile ? 200 : isTablet ? 260 : 340;
-  const cardHeight = isMobile ? 280 : isTablet ? 380 : 500;
+  const cardWidth = isMobile ? 200 : isTablet ? 260 : 340 + 50;
+  const cardHeight = isMobile ? 280 : isTablet ? 380 : 500 + 50;
 
   const calculatePosition = (index) => {
     const baseSpacing = isMobile
       ? (isStackHovered ? 50 : 35)
       : isTablet
         ? (isStackHovered ? 90 : 60)
-        : (isStackHovered ? 140 : 100);
+        : (isStackHovered ? 120 : 165);
 
     const hoverOffset = isMobile ? 100 : isTablet ? 150 : 200;
 

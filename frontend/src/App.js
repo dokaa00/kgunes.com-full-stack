@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -120,6 +120,9 @@ const IntroScreen = ({ onComplete }) => {
 
 // Main App Content with New Genre Design
 const MainContent = ({ language, setLanguage }) => {
+  const contactRef = useRef(null);
+  const skillsRef = useRef(null);
+  const contactHeaderRef = useRef(null);
   const { t } = useTranslation();
 
   // Custom cursor animation
@@ -184,12 +187,36 @@ const MainContent = ({ language, setLanguage }) => {
   const navBlur = useTransform(scrollY, [0, 200], ["blur(0px)", "blur(4px)"]);
   const navPointerEvents = useTransform(scrollY, (y) => y > 200 ? 'none' : 'auto');
 
-  // Hero animations: Sticky then scroll up
-  // Stays fixed (y=0) until 500px, then moves up
   const heroY = useTransform(scrollY, [0, 500, 1200], [0, 0, -800]);
   const heroOpacity = useTransform(scrollY, [800, 1200], [1, 0]);
 
+  const [contactTop, setContactTop] = useState(0);
+  const [skillsBottom, setSkillsBottom] = useState(0);
+  const [docHeight, setDocHeight] = useState(0);
+  const [contactHeaderHeight, setContactHeaderHeight] = useState(0);
 
+  useEffect(() => {
+    if (contactRef.current) {
+      const rect = contactRef.current.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const absoluteTop = rect.top + scrollTop;
+
+
+      setContactTop(absoluteTop);
+      setDocHeight(document.body.clientHeight);
+    }
+    if (skillsRef.current) {
+      const rect = skillsRef.current.getBoundingClientRect();
+      const absoluteBottom = rect.bottom;
+      setSkillsBottom(absoluteBottom);
+    }
+    if (contactHeaderRef.current) {
+      const contentHeight = contactHeaderRef.current.offsetHeight;;
+      setContactHeaderHeight(contentHeight);
+    }
+  }, []);
+
+  const contactY = useTransform(scrollY, [0, skillsBottom, skillsBottom + 1214 /* aynı */, docHeight - window.innerHeight], [skillsBottom, 0, -400 /* Kaancım adam akıllı dinamik variableye çevirmek lazım */, 0 - 400 /* bu da aynı şekilde */]);
 
   return (
     <>
@@ -307,40 +334,47 @@ const MainContent = ({ language, setLanguage }) => {
           </section>
 
           {/* Skills Section */}
-          <section id="skills" className="pb-32">
+          <section id="skills" className="pb-32" ref={skillsRef}>
 
             <SkillsSection setCursorVariant={setCursorVariant} />
           </section>
 
           {/* Footer / Contact Section */}
-          <section id="contact" className="pb-16">
-            <div className="max-w-7xl w-full mx-auto px-8 md:px-16">
+          <section id="contact" className="fixed inset-0 pb-16 pointer-events-none">
+            <div
+              className="max-w-7xl w-full mx-auto px-8 md:px-16 pointer-events-none"
+              ref={contactRef}
+            >
               <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
-                className="border-t border-white/10 pt-16"
+                style={{ y: contactY }}
+                className="border-t border-white/10 pt-16 pointer-events-auto"
               >
                 <div className="grid grid-cols-1 gap-12">
                   <div>
-                    <h2 className="font-serif text-4xl md:text-5xl font-light text-white/95 mb-6 leading-tight whitespace-pre-line">
-                      {t('footer.title')}
-                    </h2>
-                    <p className="font-sans font-light text-white/60 leading-relaxed mb-12">
-                      {t('footer.description')}
-                    </p>
+                    <div ref={contactHeaderRef}>
+                      <h2 className="font-serif text-4xl md:text-5xl font-light text-white/95 mb-6 leading-tight whitespace-pre-line">
+                        {t('footer.title')}
+                      </h2>
+                      <p className="font-sans font-light text-white/60 leading-relaxed mb-12">
+                        {t('footer.description')}
+                      </p>
+                    </div>
 
                     <ContactSection />
                   </div>
                 </div>
 
-                <div className="mt-24 flex justify-center items-center text-white/40 font-sans text-xs">
-                  <p>{t('footer.copyright')}</p>
-                </div>
               </motion.div>
             </div>
           </section>
+          <div className="h-[250vh]"></div>
+          <div className="mt-24 mb-16 flex justify-center items-center text-white/40 font-sans text-xs">
+            <p>{t('footer.copyright')}</p>
+          </div>
         </div>
       </div>
     </>
